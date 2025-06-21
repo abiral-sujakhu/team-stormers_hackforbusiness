@@ -32,12 +32,96 @@ interface ChecklistItem {
 
 const babyMilestones: BabyMilestone[] = [
   {
+    week: 1,
+    title: "Getting Ready for New Life",
+    description: "Pregnancy begins, but you’re not technically pregnant yet!",
+    size: "Not measurable",
+    weight: "0 oz",
+    development: [
+      "Uterus is preparing for ovulation",
+      "Hormonal changes start",
+      "Egg is maturing in the ovaries"
+    ],
+  },
+  {
+    week: 2,
+    title: "Preparing for Implantation",
+    description: "Fertilization occurs, and the zygote travels to the uterus.",
+    size: "Poppy seed",
+    weight: "0 oz",
+    development: ["Fertilization complete", "Zygote starts cell division", "Travels through fallopian tube"],
+    },
+  {
+    week: 4,
+    title: "Implantation Success",
+    description: "The embryo implants in the uterine lining.",
+    size: "Sesame seed",
+    weight: "0.01 oz",
+    development: ["Embryo implants in uterus", "Placenta begins forming", "Hormones support pregnancy"],
+    },
+  {
+  week: 6,
+  title: "Tiny Heartbeat Begins",
+  description: "Your baby’s heart is beating and facial features start forming.",
+  size: "Lentil",
+  weight: "0.04 oz",
+  development: [
+    "Heart starts beating (~110 bpm)",
+    "Limb buds forming (arms & legs)",
+    "Eye and nose spots visible",
+    "Neural tube closing (brain & spine development)"],
+  },
+  {
+    week: 8,
+    title: "Movement Begins",
+    description: "Your baby starts tiny movements!",
+    size: "Kidney bean",
+    weight: "0.04 oz",
+    development: ["Brain developing rapidly", "Arms and legs are growing", "Eyes forming with retina"],
+
+  },
+  {
+    week: 10,
+    title: "Fingers Forming",
+    description: "Baby’s vital organs are starting to function.",
+    size: "Strawberry",
+    weight: "0.14 oz",
+    development: ["Fingers and toes separate", "Kidneys start to function", "Jaw and nose forming"],
+
+  },
+  {
     week: 12,
     title: "End of First Trimester",
     description: "Your baby is now fully formed!",
     size: "Plum",
     weight: "0.5 oz",
     development: ["All major organs formed", "Fingers and toes developed", "Can make fists"],
+  },
+  {
+    week: 14,
+    title: "Making Expressions",
+    description: "Your baby can now squint, frown, and grimace!",
+    size: "Lemon",
+    weight: "1.5 oz",
+    development: ["Facial muscles working", "Spleen and liver active", "Hair starting to grow"],
+
+  },
+
+  {
+    week: 16,
+    title: "Growing Muscles",
+    description: "Baby’s muscles are strengthening, and movements increase.",
+    size: "Avocado",
+    weight: "3.5 oz",
+    development: ["Facial features refine", "Sucking motions begin", "Bones getting stronger"],
+},
+  {
+    week: 18,
+    title: "Hearing Sounds",
+    description: "Your baby may hear your heartbeat and voice.",
+    size: "Bell pepper",
+    weight: "6.7 oz",
+    development: ["Ears in position", "Nervous system maturing", "Can hear muffled sounds"],
   },
   {
     week: 20,
@@ -48,6 +132,32 @@ const babyMilestones: BabyMilestone[] = [
     development: ["Gender can be determined", "Hair and nails growing", "Can hear sounds"],
   },
   {
+    week: 22,
+    title: "Sense of Touch",
+    description: "Your baby’s grip and sense of touch develop.",
+    size: "Papaya",
+    weight: "15.2 oz",
+    development: ["Lips more sensitive", "Eyes start to open soon", "Can perceive light/dark"],
+  },
+  {
+    week: 24,
+    title: "Lungs Developing",
+    description: "Baby's lungs are forming branches for breathing.",
+    size: "Corn",
+    weight: "1.3 lbs",
+    development: ["Taste buds forming", "Skin becoming less translucent", "Facial features clearer"],
+
+  },
+
+  {
+    week: 26,
+    title: "Eyes Opening Soon",
+    description: "Your baby’s eyelids will start to open.",
+    size: "Scallion",
+    weight: "1.7 lbs",
+    development: ["Lungs continue to mature", "Nervous system active", "Hands can grasp"],
+},
+  {
     week: 28,
     title: "Third Trimester Begins",
     description: "Baby's survival rate increases significantly",
@@ -56,12 +166,47 @@ const babyMilestones: BabyMilestone[] = [
     development: ["Eyes can open and close", "Brain developing rapidly", "Can respond to light"],
   },
   {
+    week: 30,
+    title: "Brain Growth",
+    description: "Baby’s brain is growing rapidly now!",
+    size: "Cabbage",
+    weight: "3 lbs",
+    development: ["Eyesight improving", "Kicks stronger and frequent", "Fat continues to accumulate"],
+
+  },
+  {
+    week: 32,
+    title: "Practicing Breathing",
+    description: "Your baby is practicing breathing with amniotic fluid.",
+    size: "Squash",
+    weight: "4 lbs",
+    development: ["Bones fully formed", "Can turn head side to side", "Toenails present"],
+  },
+  {
+    week: 34,
+    title: "Getting Rounder",
+    description: "Baby's fat layers make the skin smoother.",
+    size: "Cantaloupe",
+    weight: "5 lbs",
+    development: ["Lungs almost fully mature", "Can detect light through womb", "Responds to sounds"],
+
+  },
+  {
     week: 36,
     title: "Full Term Approaching",
     description: "Baby is considered full-term soon",
     size: "Papaya",
     weight: "6 lbs",
     development: ["Lungs nearly mature", "Gaining weight rapidly", "Getting into birth position"],
+  },
+  {
+    week: 38,
+    title: "Ready for Birth",
+    description: "Your baby is considered full-term!",
+    size: "Leek",
+    weight: "6.8 lbs",
+    development: ["Organs fully developed", "Practicing sucking and breathing", "Positioned for birth"],
+
   },
   {
     week: 40,
@@ -107,30 +252,54 @@ const initialChecklist: ChecklistItem[] = [
   { id: 18, task: "Research pediatricians", completed: false, category: "documents", trimester: 2 },
 ]
 
+const CHECKLIST_STORAGE_KEY = "delivery-tracker-checklist";
+
+function loadChecklist(): ChecklistItem[] {
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem(CHECKLIST_STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return initialChecklist;
+      }
+    }
+  }
+  return initialChecklist;
+}
+
+function saveChecklist(list: ChecklistItem[]) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(list));
+  }
+}
+
 export default function DeliveryTrackerPage() {
   const [currentWeek, setCurrentWeek] = useState(28)
   const [dueDate, setDueDate] = useState("")
-  const [checklist, setChecklist] = useState<ChecklistItem[]>(initialChecklist)
+  const [checklist, setChecklist] = useState<ChecklistItem[]>(loadChecklist());
   const [newTask, setNewTask] = useState("")
+  const [newTaskCategory, setNewTaskCategory] = useState<"hospital" | "baby" | "home" | "documents">("home")
   const [notes, setNotes] = useState("")
   const { isPremium, upgradeToPremium, refreshSubscriptionStatus } = useSubscription()
   const { toast } = useToast()
 
   // Add state for contraction timer
-  const [contractionTimer, setContractionTimer] = useState(0)
-  const [isTimerRunning, setIsTimerRunning] = useState(false)
-  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null)
+  // const [contractionTimer, setContractionTimer] = useState(0)
+  // const [isTimerRunning, setIsTimerRunning] = useState(false)
+  // const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     // Refresh subscription status when component mounts
-    refreshSubscriptionStatus()
-
+    refreshSubscriptionStatus();
+    // Save checklist to localStorage whenever it changes
+    saveChecklist(checklist);
     // Calculate due date based on current week (mock calculation)
-    const today = new Date()
-    const weeksRemaining = 40 - currentWeek
-    const calculatedDueDate = new Date(today.getTime() + weeksRemaining * 7 * 24 * 60 * 60 * 1000)
-    setDueDate(calculatedDueDate.toLocaleDateString())
-  }, [currentWeek, refreshSubscriptionStatus])
+    const today = new Date();
+    const weeksRemaining = 40 - currentWeek;
+    const calculatedDueDate = new Date(today.getTime() + weeksRemaining * 7 * 24 * 60 * 60 * 1000);
+    setDueDate(calculatedDueDate.toLocaleDateString());
+  }, [currentWeek, refreshSubscriptionStatus, checklist])
 
   const handleChecklistToggle = (id: number) => {
     setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)))
@@ -147,20 +316,67 @@ export default function DeliveryTrackerPage() {
       id: Date.now(),
       task: newTask,
       completed: false,
-      category: "home",
+      category: newTaskCategory,
       trimester: 3,
     }
 
     setChecklist((prev) => [...prev, newItem])
     setNewTask("")
+    setNewTaskCategory("home")
     toast({
       title: "Task added",
       description: "New task added to your delivery checklist.",
     })
   }
 
+  // Returns the milestone info for the current week, using the closest previous milestone if not exact
   const getCurrentMilestone = () => {
-    return babyMilestones.find((milestone) => currentWeek >= milestone.week) || babyMilestones[0]
+    // If the user enters a week before the first milestone, show the first milestone
+    if (currentWeek < babyMilestones[0].week) {
+      return babyMilestones[0]
+    }
+    // If the user enters a week after the last milestone, show the last milestone
+    if (currentWeek >= babyMilestones[babyMilestones.length - 1].week) {
+      return babyMilestones[babyMilestones.length - 1]
+    }
+    // Otherwise, find the milestone interval the week falls into
+    for (let i = 1; i < babyMilestones.length; i++) {
+      if (currentWeek < babyMilestones[i].week) {
+        // Return the previous milestone, but with the week set to the user's input
+        const prev = babyMilestones[i - 1];
+        // Interpolate size, weight, and development if possible
+        const next = babyMilestones[i];
+        // Calculate the progress between prev and next
+        const weekSpan = next.week - prev.week;
+        const weekProgress = (currentWeek - prev.week) / weekSpan;
+        // Interpolate weight (assuming numeric values in lbs or oz)
+        const parseWeight = (w: string): number => {
+          if (!w) return 0;
+          if (w.includes('oz')) return parseFloat(w) / 16; // convert oz to lbs
+          if (w.includes('lbs')) return parseFloat(w);
+          return parseFloat(w);
+        };
+        const formatWeight = (w: number, original: string): string => {
+          if (original.includes('oz')) return `${Math.round(w * 16)} oz`;
+          return `${w.toFixed(1)} lbs`;
+        };
+        let weight = prev.weight;
+        if (prev.weight && next.weight && !isNaN(parseWeight(prev.weight)) && !isNaN(parseWeight(next.weight))) {
+          const prevW = parseWeight(prev.weight);
+          const nextW = parseWeight(next.weight);
+          const interpW = prevW + (nextW - prevW) * weekProgress;
+          weight = formatWeight(interpW, prev.weight);
+        }
+        // For size and development, just use the previous milestone (or you could interpolate with next if you want)
+        return {
+          ...prev,
+          week: currentWeek,
+          weight,
+        };
+      }
+    }
+    // Fallback (should not hit)
+    return babyMilestones[0]
   }
 
   const getNextMilestone = () => {
@@ -188,39 +404,39 @@ export default function DeliveryTrackerPage() {
     }
   }
 
-  // Add timer functions
-  const startTimer = () => {
-    if (!isTimerRunning) {
-      setIsTimerRunning(true)
-      const interval = setInterval(() => {
-        setContractionTimer((prev) => prev + 1)
-      }, 1000)
-      setTimerInterval(interval)
-    }
-  }
+  // // Add timer functions
+  // const startTimer = () => {
+  //   if (!isTimerRunning) {
+  //     setIsTimerRunning(true)
+  //     const interval = setInterval(() => {
+  //       setContractionTimer((prev) => prev + 1)
+  //     }, 1000)
+  //     setTimerInterval(interval)
+  //   }
+  // }
 
-  const stopTimer = () => {
-    if (isTimerRunning && timerInterval) {
-      setIsTimerRunning(false)
-      clearInterval(timerInterval)
-      setTimerInterval(null)
-    }
-  }
+  // const stopTimer = () => {
+  //   if (isTimerRunning && timerInterval) {
+  //     setIsTimerRunning(false)
+  //     clearInterval(timerInterval)
+  //     setTimerInterval(null)
+  //   }
+  // }
 
-  const resetTimer = () => {
-    setIsTimerRunning(false)
-    setContractionTimer(0)
-    if (timerInterval) {
-      clearInterval(timerInterval)
-      setTimerInterval(null)
-    }
-  }
+  // const resetTimer = () => {
+  //   setIsTimerRunning(false)
+  //   setContractionTimer(0)
+  //   if (timerInterval) {
+  //     clearInterval(timerInterval)
+  //     setTimerInterval(null)
+  //   }
+  // }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
-  }
+  // const formatTime = (seconds: number) => {
+  //   const mins = Math.floor(seconds / 60)
+  //   const secs = seconds % 60
+  //   return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+  // }
 
   console.log("Delivery Tracker - isPremium:", isPremium)
 
@@ -279,6 +495,37 @@ export default function DeliveryTrackerPage() {
         <Badge className="bg-purple-600 text-white">Premium Active ✨</Badge>
       </div>
 
+      {/* Input for Current Week */}
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle>Set Your Current Pregnancy Week</CardTitle>
+          <CardDescription>
+            Enter your current week of pregnancy to update your due date and progress.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center space-x-4">
+            <Label htmlFor="current-week-input">Current Week</Label>
+            <Input
+              id="current-week-input"
+              type="number"
+              min={1}
+              max={40}
+              value={currentWeek}
+              onChange={(e) => {
+                let val = parseInt(e.target.value, 10)
+                if (isNaN(val)) val = 1
+                if (val < 1) val = 1
+                if (val > 40) val = 40
+                setCurrentWeek(val)
+              }}
+              className="w-24"
+            />
+            <span className="text-xs text-muted-foreground">(1-40)</span>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Current Status */}
       <div className="grid md:grid-cols-3 gap-6">
         <Card>
@@ -287,10 +534,39 @@ export default function DeliveryTrackerPage() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentWeek} weeks</div>
+            <div className="flex items-center space-x-2">
+
+
+              <Input
+                type="number"
+                min={1}
+                max={40}
+
+
+                step={1}
+                value={currentWeek}
+                onChange={(e) => {
+                  let val = e.target.value === '' ? '' : parseInt(e.target.value, 10);
+                  if (typeof val === 'string' && val === '') {
+                    setCurrentWeek(1);
+                    return;
+                  }
+                  if (isNaN(val as number)) val = 1;
+                  if ((val as number) < 1) val = 1;
+                  if ((val as number) > 40) val = 40;
+                  setCurrentWeek(val as number);
+                }}
+                className="w-20 text-center font-bold"
+                aria-label="Current week of pregnancy"
+              />
+              <span className="text-2xl font-bold">weeks</span>
+
+            </div>
             <p className="text-xs text-muted-foreground">{40 - currentWeek} weeks remaining</p>
           </CardContent>
         </Card>
+
+
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -303,7 +579,7 @@ export default function DeliveryTrackerPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Preparation</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
@@ -314,7 +590,8 @@ export default function DeliveryTrackerPage() {
               {stats.completed} of {stats.total} tasks completed
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
+
       </div>
 
       {/* Progress Bar */}
@@ -339,7 +616,7 @@ export default function DeliveryTrackerPage() {
         <TabsList>
           <TabsTrigger value="milestones">Baby Milestones</TabsTrigger>
           <TabsTrigger value="checklist">Delivery Checklist</TabsTrigger>
-          <TabsTrigger value="notes">Notes & Plans</TabsTrigger>
+          {/* <TabsTrigger value="notes">Notes & Plans</TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="milestones" className="space-y-4">
@@ -462,13 +739,24 @@ export default function DeliveryTrackerPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex space-x-2">
+              <div className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
                 <Input
                   placeholder="Enter a custom task..."
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && addCustomTask()}
                 />
+                <select
+                  value={newTaskCategory}
+                  onChange={(e) => setNewTaskCategory(e.target.value as "hospital" | "baby" | "home" | "documents")}
+                  className="border rounded px-2 py-1 text-sm"
+                  aria-label="Select category for new task"
+                >
+                  <option value="hospital">Hospital Preparation</option>
+                  <option value="baby">Baby Preparation</option>
+                  <option value="home">Home Preparation</option>
+                  <option value="documents">Document Preparation</option>
+                </select>
                 <Button onClick={addCustomTask}>Add</Button>
               </div>
             </CardContent>
@@ -583,22 +871,22 @@ export default function DeliveryTrackerPage() {
 
       {/* Labor Preparation Section */}
       <Card className="mt-6">
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Clock className="h-5 w-5 text-red-600" />
             <span>Labor Preparation</span>
           </CardTitle>
           <CardDescription>Tools to help you prepare for and track early labor</CardDescription>
-        </CardHeader>
+        </CardHeader> */}
         <CardContent className="space-y-4">
           <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
+            {/* <Card> */}
+              {/* <CardHeader>
                 <CardTitle className="text-lg">Contraction Timer</CardTitle>
                 <CardDescription>Track the timing and duration of contractions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center space-y-4">
+              </CardHeader> */}
+              {/* <CardContent> */}
+                {/* <div className="text-center space-y-4">
                   <div className="text-3xl font-bold text-blue-600">{formatTime(contractionTimer)}</div>
                   <div className="space-x-2">
                     <Button variant="outline" onClick={startTimer} disabled={isTimerRunning}>
@@ -610,20 +898,20 @@ export default function DeliveryTrackerPage() {
                     <Button variant="outline" onClick={resetTimer}>
                       Reset
                     </Button>
-                  </div>
-                  <p className="text-sm text-gray-600">
+                  </div> */}
+                  {/* <p className="text-sm text-gray-600">
                     Time contractions to help determine when to go to the hospital
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                  </p> */}
+                {/* </div> */}
+              {/* </CardContent> */}
+            {/* </Card> */}
 
             <Card>
-              <CardHeader>
+              {/* <CardHeader>
                 <CardTitle className="text-lg">Hospital Bag Status</CardTitle>
                 <CardDescription>Quick overview of your hospital bag preparation</CardDescription>
-              </CardHeader>
-              <CardContent>
+              </CardHeader> */}
+              {/* <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Hospital bag packed</span>
@@ -647,9 +935,9 @@ export default function DeliveryTrackerPage() {
                     }}
                   >
                     Review Full Checklist
-                  </Button>
-                </div>
-              </CardContent>
+                  </Button> */}
+                {/* </div>
+              </CardContent> */}
             </Card>
           </div>
 
@@ -684,5 +972,5 @@ export default function DeliveryTrackerPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
