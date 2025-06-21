@@ -60,7 +60,7 @@ export default function LoginPage() {
         SubscriptionManager.verifySubscription(email)
       }
 
-      console.log("✅ Login successful:", userData)
+      console.log(" Login successful:", userData)
 
       toast({
         title: existingPremiumStatus ? "Welcome back, Premium Member! 🎉" : "Welcome back! 👋",
