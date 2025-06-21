@@ -27,7 +27,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      console.log("🔐 Login attempt for:", email)
+      console.log(" Login attempt for:", email)
 
       // Simulate login - replace with actual Supabase auth
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -36,7 +36,7 @@ export default function LoginPage() {
       const existingPremiumStatus = SubscriptionManager.getPremiumStatus(email)
       const subscriptionDetails = SubscriptionManager.getSubscriptionDetails(email)
 
-      console.log("📋 Existing subscription status:", {
+      console.log(" Existing subscription status:", {
         email,
         isPremium: existingPremiumStatus,
         details: subscriptionDetails,
@@ -60,7 +60,7 @@ export default function LoginPage() {
         SubscriptionManager.verifySubscription(email)
       }
 
-      console.log("✅ Login successful:", userData)
+      console.log(" Login successful:", userData)
 
       toast({
         title: existingPremiumStatus ? "Welcome back, Premium Member! 🎉" : "Welcome back! 👋",

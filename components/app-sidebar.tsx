@@ -61,21 +61,18 @@ const trimesterItems = [
     url: "/dashboard/trimester/1",
     icon: Baby,
     color: "text-green-500",
-    emoji: "🌱",
   },
   {
     title: "Second Trimester",
     url: "/dashboard/trimester/2",
     icon: Baby,
     color: "text-blue-500",
-    emoji: "🌸",
   },
   {
     title: "Third Trimester",
     url: "/dashboard/trimester/3",
     icon: Baby,
     color: "text-purple-500",
-    emoji: "🌺",
   },
 ]
 
@@ -133,7 +130,6 @@ export function AppSidebar() {
                     className="rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-pink-100 data-[active=true]:to-purple-100 dark:data-[active=true]:from-pink-900/30 dark:data-[active=true]:to-purple-900/30 data-[active=true]:text-pink-700 dark:data-[active=true]:text-pink-300"
                   >
                     <Link href={item.url} className="flex items-center space-x-3 w-full">
-                      <span className="text-lg">{item.emoji}</span>
                       <span className="font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
