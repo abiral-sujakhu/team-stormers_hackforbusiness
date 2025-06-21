@@ -285,8 +285,10 @@ export default function DeliveryTrackerPage() {
   const { toast } = useToast()
 
 
+
   useEffect(() => {
   
+
     refreshSubscriptionStatus();
     // Save checklist to localStorage whenever it changes
     saveChecklist(checklist);
@@ -400,7 +402,7 @@ export default function DeliveryTrackerPage() {
     }
   }
 
- 
+
   console.log("Delivery Tracker - isPremium:", isPremium)
 
   if (!isPremium) {
@@ -542,7 +544,7 @@ export default function DeliveryTrackerPage() {
           </CardContent>
         </Card>
 
-       </div>
+
 
       {/* Progress Bar */}
       <Card>
@@ -821,8 +823,11 @@ export default function DeliveryTrackerPage() {
 
       {/* Labor Preparation Section */}
       <Card className="mt-6">
+
+
         <CardContent className="space-y-4">
   
+
 
           {/* Labor Signs Information */}
           <Card>

@@ -50,6 +50,7 @@ export default function ChatbotPage() {
     scrollToBottom()
   }, [messages])
 
+
  
   const generateBotResponse = (userMessage: string): string | null => {
     const lowerMessage = userMessage.toLowerCase().trim()
@@ -61,42 +62,69 @@ export default function ChatbotPage() {
 
     if (lowerMessage.includes("first trimester") || lowerMessage.includes("avoid")) {
       return "During your first trimester, it's important to avoid raw or undercooked meats, fish high in mercury (like shark, swordfish), unpasteurized dairy products, and excessive caffeine. Focus on folate-rich foods like leafy greens and fortified cereals. Would you like specific recipe suggestions?"
+
     }
 
-    if (lowerMessage.includes("protein")) {
-      return "Pregnant women need about 75-100g of protein daily, especially in the second and third trimesters. Great sources include lean meats, fish, eggs, beans, tofu, and Greek yogurt. I can suggest some delicious high-protein recipes if you'd like!"
+    if (/\bprotein\b/.test(lowerMessage)) {
+      return "During pregnancy, aim for 75-100g of protein daily. Good sources: eggs, chicken, fish (low mercury), lentils, beans, paneer, tofu, Greek yogurt, and nuts. Would you like a sample meal plan or Nepali protein-rich recipes?"
     }
 
-    if (lowerMessage.includes("iron")) {
-      return "Iron is crucial during pregnancy! You need about 27mg daily. Excellent sources include lean red meat, poultry, fish, beans, spinach, and fortified cereals. Pair iron-rich foods with vitamin C (like citrus fruits) to enhance absorption. Would you like some iron-rich meal ideas?"
+    if (/\biron\b/.test(lowerMessage)) {
+      return "Pregnant women need 27mg iron daily. Eat: lean red meat, chicken, fish, spinach, lentils, beans, and iron-fortified cereals. Pair with vitamin C (citrus, tomatoes) for better absorption. Want iron-rich Nepali recipes or a daily iron chart?"
     }
 
-    if (lowerMessage.includes("coffee") || lowerMessage.includes("caffeine")) {
-      return "You can have coffee during pregnancy, but limit caffeine to 200mg per day (about 1-2 cups of coffee). This includes tea, chocolate, and some sodas. Herbal teas like ginger tea can be great alternatives and help with morning sickness!"
+    if (/\b(coffee|caffeine|tea)\b/.test(lowerMessage)) {
+      return "Limit caffeine to 200mg/day (about 1-2 cups of coffee or 3-4 cups of tea). Herbal teas like ginger or mint are safe. Avoid energy drinks. Want caffeine-free drink ideas or herbal tea recipes?"
     }
 
-    if (lowerMessage.includes("supplement")) {
-      return "Essential supplements during pregnancy include prenatal vitamins with folic acid (400-600mcg), iron, calcium, and DHA omega-3s. Always consult your healthcare provider before starting any supplements. They can recommend the best options based on your specific needs."
+    if (/\b(supplement|vitamin|multivitamin)\b/.test(lowerMessage)) {
+      return "Take prenatal vitamins with folic acid (400-600mcg), iron, calcium, and DHA. Always consult your doctor before starting new supplements. Want a checklist of essential supplements or local brands?"
     }
 
-    if (lowerMessage.includes("calcium")) {
-      return "You need about 1000mg of calcium daily during pregnancy for your baby's bone development. Great sources include dairy products, leafy greens, almonds, sardines, and fortified plant milks. Try our calcium-rich smoothie recipes!"
+    if (/\bcalcium\b/.test(lowerMessage)) {
+      return "You need 1000mg calcium daily. Sources: milk, cheese, yogurt, tofu, almonds, leafy greens, and fortified plant milks. Want a list of calcium-rich Nepali foods or recipes?"
     }
 
-    if (lowerMessage.includes("morning sickness") || lowerMessage.includes("nausea")) {
-      return "For morning sickness, try eating small, frequent meals, keep crackers by your bedside, try ginger tea or ginger candies, and avoid spicy or fatty foods. Bland foods like toast, rice, and bananas can help. Stay hydrated with small sips throughout the day."
+    if (/\b(morning sickness|nausea|vomit|vomiting|feel sick)\b/.test(lowerMessage)) {
+      return "For morning sickness: eat small, frequent meals, try ginger tea, avoid spicy/fatty foods, and keep crackers by your bed. Bananas, rice, and curd are gentle on the stomach. Want more home remedies or a bland meal plan?"
     }
 
-    // Filter irrelevant short messages
-    if (lowerMessage.length < 10) return null
 
-    const defaultResponses = [
-      "That's a great question! For personalized nutrition advice, I recommend consulting with your healthcare provider.",
-      "I'd be happy to help! Can you tell me which trimester you're in or any specific concern you have?",
-      "Every pregnancy is unique! I can offer general tips, but your doctor can provide the best personalized advice.",
-    ]
+    if (/\b(weight gain|how much weight|gain weight)\b/.test(lowerMessage)) {
+      return "Healthy weight gain depends on your pre-pregnancy BMI. On average: 1-2kg in the first trimester, then 0.5kg/week. Your doctor can give you a personalized target. Want a weight gain chart or tips to manage weight?"
+    }
 
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)]
+    if (/\b(hydration|water|drink)\b/.test(lowerMessage)) {
+      return "Drink at least 8-10 glasses of water daily. Coconut water, lassi, and soups are also good. Limit sugary drinks. Want hydration tips or healthy drink recipes?"
+    }
+
+    if (/\b(gestational diabetes|sugar|diabetes)\b/.test(lowerMessage)) {
+      return "If you have gestational diabetes, focus on whole grains, high-fiber foods, lean proteins, and non-starchy vegetables. Limit sweets and refined carbs. Want a sample meal plan for gestational diabetes or a Nepali food list?"
+    }
+
+    if (/\bconstipation\b/.test(lowerMessage)) {
+      return "Constipation is common in pregnancy. Eat more fiber (whole grains, fruits, vegetables), drink plenty of water, and stay active. Prunes and papaya can help. Want a fiber-rich meal plan?"
+    }
+
+    if (/\banemia|hemoglobin\b/.test(lowerMessage)) {
+      return "To prevent anemia, eat iron-rich foods (meat, beans, spinach), take your prenatal vitamins, and pair iron with vitamin C. Want a list of foods to boost hemoglobin?"
+    }
+
+    if (/\bheartburn|acidity\b/.test(lowerMessage)) {
+      return "For heartburn, eat smaller meals, avoid spicy/fatty foods, and don't lie down right after eating. Drink cold milk or eat yogurt for relief. Want more tips?"
+    }
+
+    if (/\bcramps|leg cramps\b/.test(lowerMessage)) {
+      return "Leg cramps are common. Stay hydrated, stretch your legs, and get enough calcium and magnesium. Bananas and milk can help. Want more remedies?"
+    }
+
+    if (/\bgestational hypertension|high blood pressure\b/.test(lowerMessage)) {
+      return "For high blood pressure, reduce salt, avoid processed foods, eat more fruits/vegetables, and stay active. Always follow your doctor's advice. Want a low-salt meal plan?"
+    }
+
+
+    // Default fallback
+    return "I'm here to help with pregnancy nutrition! Please ask about foods, supplements, meal plans, or any specific concern. For medical emergencies, always consult your doctor."
   }
 
   // ✅ REPLACED handleSendMessage TO SKIP NULL BOT RESPONSE

@@ -27,10 +27,8 @@ interface Doctor {
   name: string
   specialty: string
   rating: number
-  reviews: number
   experience: number
   location: string
-  distance: string
   phone: string
   email: string
   image: string
@@ -39,7 +37,6 @@ interface Doctor {
   languages: string[]
   availability: string[]
   consultationFee: number
-  acceptsInsurance: boolean
 }
 
 interface Appointment {
@@ -56,108 +53,75 @@ interface Appointment {
 const mockDoctors: Doctor[] = [
   {
     id: 1,
-    name: "Dr. Sarah Johnson",
+    name: "Dr. Sita Sharma",
     specialty: "Obstetrician & Gynecologist",
     rating: 4.9,
-    reviews: 127,
     experience: 12,
-    location: "Women's Health Center",
-    distance: "2.3 miles",
-    phone: "(555) 123-4567",
-    email: "dr.johnson@womenshealth.com",
+    location: "Kathmandu Maternity Center",
+    phone: "9812345678",
+    email: "dr.sita@kathmandumaternity.com",
     image: "/placeholder.svg?height=100&width=100",
-    bio: "Dr. Johnson specializes in high-risk pregnancies and has delivered over 2,000 babies. She is passionate about providing comprehensive prenatal care and supporting women through their pregnancy journey.",
+    bio: "Dr. Sita Sharma specializes in high-risk pregnancies and is dedicated to providing compassionate care to mothers throughout Nepal.",
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections"],
-    languages: ["English", "Spanish"],
+    languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
-    consultationFee: 200,
-    acceptsInsurance: true,
+    consultationFee: 400,
   },
   {
     id: 2,
-    name: "Dr. Michael Chen",
+    name: "Dr. Ram Bahadur Thapa",
     specialty: "Maternal-Fetal Medicine",
     rating: 4.8,
-    reviews: 89,
     experience: 15,
-    location: "City Medical Center",
-    distance: "3.7 miles",
-    phone: "(555) 234-5678",
-    email: "dr.chen@citymedical.com",
+    location: "Patan Hospital",
+    phone: "9801122334",
+    email: "dr.ram@patanhospital.com",
     image: "/placeholder.svg?height=100&width=100",
-    bio: "Dr. Chen is a specialist in maternal-fetal medicine with expertise in complex pregnancies and fetal diagnostics. He uses the latest technology to ensure the best outcomes for both mother and baby.",
+    bio: "Dr. Ram Bahadur Thapa is an expert in maternal-fetal medicine, helping families with complex pregnancies across Nepal.",
     specializations: ["Fetal diagnostics", "Genetic counseling", "Multiple pregnancies", "Fetal surgery"],
-    languages: ["English", "Mandarin"],
+    languages: ["English", "Nepali"],
     availability: ["Tuesday", "Wednesday", "Thursday", "Saturday"],
     consultationFee: 250,
-    acceptsInsurance: true,
   },
   {
     id: 3,
-    name: "Dr. Emily Rodriguez",
+    name: "Dr. Mina Karki",
     specialty: "Certified Nurse Midwife",
     rating: 4.7,
-    reviews: 156,
     experience: 8,
-    location: "Natural Birth Center",
-    distance: "1.8 miles",
-    phone: "(555) 345-6789",
-    email: "dr.rodriguez@naturalbirth.com",
+    location: "Biratnagar Birth Center",
+    phone: "9845671234",
+    email: "dr.mina@biratnagarbirth.com",
     image: "/placeholder.svg?height=100&width=100",
-    bio: "Dr. Rodriguez is a certified nurse midwife who believes in empowering women through natural childbirth. She provides personalized care and supports families in creating their ideal birth experience.",
+    bio: "Dr. Mina Karki empowers women through natural childbirth and provides personalized care for families in the eastern region.",
     specializations: ["Natural birth", "Water birth", "Home birth", "Breastfeeding support"],
-    languages: ["English", "Spanish", "Portuguese"],
+    languages: ["English", "Nepali"],
     availability: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday"],
     consultationFee: 150,
-    acceptsInsurance: false,
   },
   {
     id: 4,
-    name: "Dr. James Wilson",
+    name: "Dr. Bishal Adhikari",
     specialty: "Perinatologist",
     rating: 4.9,
-    reviews: 203,
     experience: 18,
-    location: "University Hospital",
-    distance: "4.2 miles",
-    phone: "(555) 456-7890",
-    email: "dr.wilson@universityhospital.com",
+    location: "Pokhara Regional Hospital",
+    phone: "9865432109",
+    email: "dr.bishal@pokharahospital.com",
     image: "/placeholder.svg?height=100&width=100",
-    bio: "Dr. Wilson is a perinatologist with extensive experience in managing high-risk pregnancies and complications. He works closely with a multidisciplinary team to provide the highest level of care.",
+    bio: "Dr. Bishal Adhikari has extensive experience in managing high-risk pregnancies and complications in the western region.",
     specializations: ["High-risk pregnancies", "Preterm labor", "Pregnancy complications", "NICU coordination"],
-    languages: ["English"],
+    languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Thursday", "Friday"],
     consultationFee: 300,
-    acceptsInsurance: true,
   },
 ]
 
-const mockAppointments: Appointment[] = [
-  {
-    id: 1,
-    doctorId: 1,
-    doctorName: "Dr. Sarah Johnson",
-    date: "2024-01-15",
-    time: "10:00 AM",
-    type: "checkup",
-    status: "upcoming",
-    notes: "Regular prenatal checkup - 28 weeks",
-  },
-  {
-    id: 2,
-    doctorId: 2,
-    doctorName: "Dr. Michael Chen",
-    date: "2024-01-08",
-    time: "2:30 PM",
-    type: "ultrasound",
-    status: "completed",
-    notes: "Anatomy scan completed - everything looks great!",
-  },
-]
+const mockAppointments: Appointment[] = []
 
 export default function DoctorsPage() {
   const [doctors, setDoctors] = useState<Doctor[]>(mockDoctors)
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments)
+  const [appointments, setAppointments] = useState<Appointment[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSpecialty, setSelectedSpecialty] = useState("All specialties")
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null)
@@ -228,11 +192,11 @@ export default function DoctorsPage() {
             </p>
             <Button
               onClick={() => {
-                upgradeToPremium()
+                upgradeToPremium();
                 toast({
                   title: "Welcome to Premium!",
                   description: "You now have access to doctor appointments and all premium features.",
-                })
+                });
               }}
             >
               Upgrade to Premium
@@ -240,7 +204,7 @@ export default function DoctorsPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -257,44 +221,6 @@ export default function DoctorsPage() {
         </TabsList>
 
         <TabsContent value="find" className="space-y-4">
-          {/* Search and Filter */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Search className="h-5 w-5" />
-                <span>Find Your Doctor</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="search">Search by name or specialty</Label>
-                  <Input
-                    id="search"
-                    placeholder="Search doctors..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="specialty">Filter by specialty</Label>
-                  <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="All specialties" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="All specialties">All specialties</SelectItem>
-                      <SelectItem value="Obstetrician">Obstetrician & Gynecologist</SelectItem>
-                      <SelectItem value="Maternal-Fetal">Maternal-Fetal Medicine</SelectItem>
-                      <SelectItem value="Midwife">Certified Nurse Midwife</SelectItem>
-                      <SelectItem value="Perinatologist">Perinatologist</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Doctor Cards */}
           <div className="grid md:grid-cols-2 gap-6">
             {filteredDoctors.map((doctor) => (
@@ -313,7 +239,6 @@ export default function DoctorsPage() {
                         <div className="flex items-center space-x-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           <span className="text-sm font-medium">{doctor.rating}</span>
-                          <span className="text-sm text-gray-500">({doctor.reviews} reviews)</span>
                         </div>
                         <Badge variant="secondary">{doctor.experience} years</Badge>
                       </div>
@@ -323,34 +248,14 @@ export default function DoctorsPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      <span>{doctor.distance}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
                       <Phone className="h-4 w-4 text-gray-500" />
                       <span>{doctor.phone}</span>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">Specializations:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {doctor.specializations.slice(0, 3).map((spec, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {spec}
-                        </Badge>
-                      ))}
-                      {doctor.specializations.length > 3 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{doctor.specializations.length - 3} more
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="text-sm">
-                      <span className="font-semibold">${doctor.consultationFee}</span>
+                      <span className="font-semibold">Nrs {doctor.consultationFee}</span>
                       <span className="text-gray-500"> consultation</span>
                     </div>
                     <div className="space-x-2">
@@ -447,7 +352,7 @@ export default function DoctorsPage() {
 
                             <div className="flex justify-between items-center pt-4 border-t">
                               <div className="text-sm text-gray-600">
-                                Consultation fee: <span className="font-semibold">${doctor.consultationFee}</span>
+                                Consultation fee: <span className="font-semibold">Nrs {doctor.consultationFee}</span>
                               </div>
                               <Button onClick={handleBookAppointment}>Confirm Booking</Button>
                             </div>
@@ -515,6 +420,57 @@ export default function DoctorsPage() {
                     {appointment.notes && (
                       <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         <p className="text-sm">{appointment.notes}</p>
+                      </div>
+                    )}
+                    {appointment.status === "upcoming" && (
+                      <div className="flex justify-end mt-4 space-x-2">
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => {
+                            setAppointments((prev) =>
+                              prev.map((a) =>
+                                a.id === appointment.id ? { ...a, status: "cancelled" } : a
+                              )
+                            )
+                            toast({
+                              title: "Appointment cancelled",
+                              description: `Your appointment with ${appointment.doctorName} has been cancelled.`,
+                            })
+                          }}
+                        >
+                          Cancel Appointment
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setAppointments((prev) => prev.filter((a) => a.id !== appointment.id))
+                            toast({
+                              title: "Appointment removed",
+                              description: `This appointment has been removed from your list.`,
+                            })
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                    {["completed", "cancelled"].includes(appointment.status) && (
+                      <div className="flex justify-end mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setAppointments((prev) => prev.filter((a) => a.id !== appointment.id))
+                            toast({
+                              title: "Appointment removed",
+                              description: `This appointment has been removed from your list.`,
+                            })
+                          }}
+                        >
+                          Remove
+                        </Button>
                       </div>
                     )}
                   </CardContent>

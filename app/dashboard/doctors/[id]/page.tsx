@@ -28,21 +28,20 @@ import { useToast } from "@/hooks/use-toast"
 const doctorData = {
   "1": {
     id: 1,
-    name: "Dr. Sarah Johnson",
+    name: "Dr. Sita Sharma",
     specialty: "Obstetrician & Gynecologist",
     rating: 4.9,
-    reviews: 127,
     experience: 12,
-    location: "Women's Health Center",
-    address: "123 Medical Plaza, Suite 200, City, State 12345",
-    phone: "(555) 123-4567",
-    email: "dr.johnson@womenshealth.com",
+    location: "Kathmandu Maternity Center",
+    address: "123 Medical Plaza, Suite 200, Kathmandu, Nepal",
+    phone: "9812345678",
+    email: "dr.sita@kathmandumaternity.com",
     image: "/placeholder.svg?height=200&width=200",
-    bio: "Dr. Johnson specializes in high-risk pregnancies and has delivered over 2,000 babies. She is passionate about providing comprehensive prenatal care and supporting women through their pregnancy journey. She completed her residency at Johns Hopkins and has been practicing for over 12 years.",
+    bio: "Dr. Sita Sharma specializes in high-risk pregnancies and is dedicated to providing compassionate care to mothers throughout Nepal. She completed her residency at Tribhuvan University Teaching Hospital and has been practicing for over 12 years.",
     education: [
-      "MD - Harvard Medical School (2008)",
-      "Residency - Johns Hopkins Hospital (2012)",
-      "Fellowship - Maternal-Fetal Medicine, UCLA (2014)",
+      "MD - Institute of Medicine, TU (2008)",
+      "Residency - TUTH (2012)",
+      "Fellowship - Maternal-Fetal Medicine, Patan Hospital (2014)",
     ],
     certifications: [
       "Board Certified in Obstetrics & Gynecology",
@@ -50,13 +49,97 @@ const doctorData = {
       "Advanced Life Support in Obstetrics (ALSO)",
     ],
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections", "Genetic counseling"],
-    languages: ["English", "Spanish"],
+    languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
-    consultationFee: 200,
-    acceptsInsurance: true,
-    insuranceAccepted: ["Blue Cross Blue Shield", "Aetna", "Cigna", "UnitedHealth"],
-    hospitalAffiliations: ["City General Hospital", "Women's Medical Center", "Regional Medical Center"],
-    awards: ["Top Doctor 2023 - City Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
+    consultationFee: 400,
+    hospitalAffiliations: ["Kathmandu Maternity Center", "Patan Hospital", "Teaching Hospital"],
+    awards: ["Top Doctor 2023 - Kathmandu Health Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
+  },
+  "2": {
+    id: 2,
+    name: "Dr. Ram Bahadur Thapa",
+    specialty: "Maternal-Fetal Medicine",
+    rating: 4.8,
+    experience: 15,
+    location: "Patan Hospital",
+    address: "456 Hospital Road, Patan, Nepal",
+    phone: "9801122334",
+    email: "dr.ram@patanhospital.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Ram Bahadur Thapa is an expert in maternal-fetal medicine, helping families with complex pregnancies across Nepal. He completed his fellowship at Patan Hospital and has over 15 years of experience.",
+    education: [
+      "MD - BPKIHS (2006)",
+      "Residency - Patan Hospital (2010)",
+      "Fellowship - Maternal-Fetal Medicine, Patan Hospital (2012)",
+    ],
+    certifications: [
+      "Board Certified in Maternal-Fetal Medicine",
+      "Genetic Counseling Certification",
+      "Advanced Ultrasound Training",
+    ],
+    specializations: ["Fetal diagnostics", "Genetic counseling", "Multiple pregnancies", "Fetal surgery"],
+    languages: ["English", "Nepali"],
+    availability: ["Tuesday", "Wednesday", "Thursday", "Saturday"],
+    consultationFee: 250,
+    hospitalAffiliations: ["Patan Hospital", "Kathmandu Maternity Center"],
+    awards: ["Best Maternal-Fetal Specialist 2022", "Research Excellence Award 2021"],
+  },
+  "3": {
+    id: 3,
+    name: "Dr. Mina Karki",
+    specialty: "Certified Nurse Midwife",
+    rating: 4.7,
+    experience: 8,
+    location: "Biratnagar Birth Center",
+    address: "789 Birth Center Lane, Biratnagar, Nepal",
+    phone: "9845671234",
+    email: "dr.mina@biratnagarbirth.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Mina Karki empowers women through natural childbirth and provides personalized care for families in the eastern region. She is a certified nurse midwife with a passion for holistic care.",
+    education: [
+      "BSc Nursing - Purbanchal University (2012)",
+      "Certified Nurse Midwife - Nepal Nursing Council (2014)",
+    ],
+    certifications: [
+      "Certified Nurse Midwife",
+      "Water Birth Specialist",
+      "Breastfeeding Support Certification",
+    ],
+    specializations: ["Natural birth", "Water birth", "Home birth", "Breastfeeding support"],
+    languages: ["English", "Nepali"],
+    availability: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    consultationFee: 150,
+    hospitalAffiliations: ["Biratnagar Birth Center"],
+    awards: ["Midwife of the Year 2023", "Community Care Award 2022"],
+  },
+  "4": {
+    id: 4,
+    name: "Dr. Bishal Adhikari",
+    specialty: "Perinatologist",
+    rating: 4.9,
+    experience: 18,
+    location: "Pokhara Regional Hospital",
+    address: "321 Regional Hospital Road, Pokhara, Nepal",
+    phone: "9865432109",
+    email: "dr.bishal@pokharahospital.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Bishal Adhikari has extensive experience in managing high-risk pregnancies and complications in the western region. He is a leading perinatologist in Pokhara.",
+    education: [
+      "MD - Pokhara University (2004)",
+      "Residency - Pokhara Regional Hospital (2008)",
+      "Fellowship - Perinatology, Kathmandu University (2010)",
+    ],
+    certifications: [
+      "Board Certified in Perinatology",
+      "NICU Coordination Training",
+      "Preterm Labor Management Certification",
+    ],
+    specializations: ["High-risk pregnancies", "Preterm labor", "Pregnancy complications", "NICU coordination"],
+    languages: ["English", "Nepali"],
+    availability: ["Monday", "Tuesday", "Thursday", "Friday"],
+    consultationFee: 300,
+    hospitalAffiliations: ["Pokhara Regional Hospital", "Kathmandu Maternity Center"],
+    awards: ["Perinatologist of the Year 2024", "Patient Care Excellence 2023"],
   },
 }
 
@@ -70,44 +153,112 @@ interface Review {
   verified: boolean
 }
 
-const mockReviews: Review[] = [
-  {
-    id: 1,
-    patientName: "Sarah M.",
-    rating: 5,
-    date: "2024-01-10",
-    comment:
-      "Dr. Johnson was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
-    helpful: 12,
-    verified: true,
-  },
-  {
-    id: 2,
-    patientName: "Maria L.",
-    rating: 5,
-    date: "2024-01-05",
-    comment:
-      "Excellent care during my high-risk pregnancy. Dr. Johnson's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
-    helpful: 8,
-    verified: true,
-  },
-  {
-    id: 3,
-    patientName: "Jennifer K.",
-    rating: 4,
-    date: "2023-12-28",
-    comment:
-      "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
-    helpful: 5,
-    verified: true,
-  },
-]
+const doctorReviews: Record<string, Review[]> = {
+  "1": [
+    {
+      id: 1,
+      patientName: "Sarah Rai",
+      rating: 5,
+      date: "2024-01-10",
+      comment:
+        "Dr. Sharma was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
+      helpful: 12,
+      verified: true,
+    },
+    {
+      id: 2,
+      patientName: "Mona Tamang",
+      rating: 5,
+      date: "2024-01-05",
+      comment:
+        "Excellent care during my high-risk pregnancy. Dr. Sharma's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
+      helpful: 8,
+      verified: true,
+    },
+    {
+      id: 3,
+      patientName: "Jenni K.",
+      rating: 4,
+      date: "2023-12-28",
+      comment:
+        "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
+      helpful: 5,
+      verified: true,
+    },
+  ],
+  "2": [
+    {
+      id: 4,
+      patientName: "Ramesh Shrestha",
+      rating: 5,
+      date: "2024-02-15",
+      comment:
+        "Dr. Ram Bahadur Thapa provided excellent support during our complicated pregnancy. His expertise in fetal diagnostics is unmatched.",
+      helpful: 10,
+      verified: true,
+    },
+    {
+      id: 5,
+      patientName: "Anita Gurung",
+      rating: 4,
+      date: "2024-01-30",
+      comment:
+        "Very thorough and caring. He explained every step and made us feel at ease.",
+      helpful: 6,
+      verified: true,
+    },
+  ],
+  "3": [
+    {
+      id: 6,
+      patientName: "Sunita Karki",
+      rating: 5,
+      date: "2024-03-10",
+      comment:
+        "Dr. Mina Karki was so supportive during my home birth. She made the experience calm and empowering.",
+      helpful: 7,
+      verified: true,
+    },
+    {
+      id: 7,
+      patientName: "Bina Rai",
+      rating: 4,
+      date: "2024-02-22",
+      comment:
+        "Great midwife, very knowledgeable about natural birth and breastfeeding support.",
+      helpful: 4,
+      verified: true,
+    },
+  ],
+  "4": [
+    {
+      id: 8,
+      patientName: "Kamal Adhikari",
+      rating: 5,
+      date: "2024-04-05",
+      comment:
+        "Dr. Bishal Adhikari managed my wife's high-risk pregnancy with great care. We are grateful for his expertise.",
+      helpful: 9,
+      verified: true,
+    },
+    {
+      id: 9,
+      patientName: "Maya Gurung",
+      rating: 5,
+      date: "2024-03-18",
+      comment:
+        "Very experienced and compassionate doctor. Highly recommended for complicated pregnancies.",
+      helpful: 5,
+      verified: true,
+    },
+  ],
+}
 
 export default function DoctorProfilePage() {
   const params = useParams()
   const doctorId = params.id as string
   const doctor = doctorData[doctorId as keyof typeof doctorData]
-  const [reviews, setReviews] = useState<Review[]>(mockReviews)
+  const [reviews, setReviews] = useState<Review[]>(doctorReviews[doctorId] || [])
   const [newReview, setNewReview] = useState("")
   const [newRating, setNewRating] = useState(5)
   const { isPremium } = useSubscription()
@@ -186,7 +337,6 @@ export default function DoctorProfilePage() {
                 <div className="flex items-center space-x-1">
                   <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-semibold">{doctor.rating}</span>
-                  <span className="text-gray-500">({doctor.reviews} reviews)</span>
                 </div>
                 <Badge variant="secondary">{doctor.experience} years experience</Badge>
                 <Badge variant="outline">Board Certified</Badge>
@@ -210,44 +360,6 @@ export default function DoctorProfilePage() {
                   <span className="text-sm">Available {doctor.availability.length} days/week</span>
                 </div>
               </div>
-
-              {/* Add click handlers for the main action buttons: */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
-                <Button
-                  onClick={() => {
-                    toast({
-                      title: "Booking appointment",
-                      description: "Opening appointment booking form...",
-                    })
-                  }}
-                >
-                  Book Appointment
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    toast({
-                      title: "Doctor saved",
-                      description: `${doctor.name} has been saved to your favorites.`,
-                    })
-                  }}
-                >
-                  <Heart className="h-4 w-4 mr-2" />
-                  Save Doctor
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    toast({
-                      title: "Message sent",
-                      description: "Your message has been sent to the doctor's office.",
-                    })
-                  }}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Message
-                </Button>
-              </div>
             </div>
           </div>
         </CardContent>
@@ -255,12 +367,10 @@ export default function DoctorProfilePage() {
 
       {/* Detailed Information Tabs */}
       <Tabs defaultValue="about" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="about">About</TabsTrigger>
-          <TabsTrigger value="specializations">Specializations</TabsTrigger>
           <TabsTrigger value="reviews">Reviews</TabsTrigger>
           <TabsTrigger value="availability">Availability</TabsTrigger>
-          <TabsTrigger value="insurance">Insurance</TabsTrigger>
         </TabsList>
 
         <TabsContent value="about" className="space-y-4">
@@ -324,46 +434,12 @@ export default function DoctorProfilePage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="specializations" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Areas of Expertise</CardTitle>
-              <CardDescription>Dr. {doctor.name.split(" ")[1]}'s specialized areas of practice</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                {doctor.specializations.map((spec, index) => (
-                  <Card key={index}>
-                    <CardContent className="pt-4">
-                      <h4 className="font-semibold">{spec}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        Specialized care and treatment in {spec.toLowerCase()}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <div className="mt-6">
-                <h4 className="font-semibold mb-3">Languages Spoken</h4>
-                <div className="flex flex-wrap gap-2">
-                  {doctor.languages.map((lang, index) => (
-                    <Badge key={index} variant="secondary">
-                      {lang}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="reviews" className="space-y-4">
           {/* Review Summary */}
           <Card>
             <CardHeader>
               <CardTitle>Patient Reviews</CardTitle>
-              <CardDescription>{doctor.reviews} verified patient reviews</CardDescription>
+              <CardDescription>{reviews.length} verified patient reviews</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-4">
@@ -382,17 +458,17 @@ export default function DoctorProfilePage() {
                   <div className="text-sm text-gray-600">Overall Rating</div>
                 </div>
                 <div className="flex-1">
-                  {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center space-x-2">
-                      <span className="text-sm w-8">{rating}★</span>
+                  {[5, 4, 3, 2, 1].map((starValue) => (
+                    <div key={starValue} className="flex items-center space-x-2">
+                      <span className="text-sm w-8">{starValue}★</span>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 h-2 rounded-full"
-                          style={{ width: `${rating === 5 ? 80 : rating === 4 ? 15 : 5}%` }}
+                          style={{ width: `${starValue === 5 ? 80 : starValue === 4 ? 15 : 5}%` }}
                         ></div>
                       </div>
                       <span className="text-sm text-gray-600 w-8">
-                        {rating === 5 ? "80%" : rating === 4 ? "15%" : "5%"}
+                        {starValue === 5 ? "80%" : starValue === 4 ? "15%" : "5%"}
                       </span>
                     </div>
                   ))}
@@ -428,16 +504,6 @@ export default function DoctorProfilePage() {
                         ))}
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
-                      <div className="flex items-center space-x-4 mt-3">
-                        <Button variant="ghost" size="sm">
-                          <ThumbsUp className="h-3 w-3 mr-1" />
-                          Helpful ({review.helpful})
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <ThumbsDown className="h-3 w-3 mr-1" />
-                          Not Helpful
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -533,79 +599,6 @@ export default function DoctorProfilePage() {
                   <li>• Please arrive 15 minutes early for your appointment</li>
                   <li>• Cancellations must be made 24 hours in advance</li>
                 </ul>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="insurance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Insurance & Payment</CardTitle>
-              <CardDescription>Payment options and insurance information</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h4 className="font-semibold mb-3">Consultation Fees</h4>
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <span>Initial Consultation</span>
-                    <span className="font-semibold">${doctor.consultationFee}</span>
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span>Follow-up Visit</span>
-                    <span className="font-semibold">$150</span>
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span>Ultrasound</span>
-                    <span className="font-semibold">$250</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Insurance Accepted</h4>
-                <div className="grid md:grid-cols-2 gap-2">
-                  {doctor.insuranceAccepted.map((insurance, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-2 p-2 bg-green-50 dark:bg-green-900/20 rounded"
-                    >
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm">{insurance}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Payment Methods</h4>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Cash</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Credit/Debit Cards</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Health Savings Account (HSA)</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Flexible Spending Account (FSA)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-                <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Insurance Note</h4>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  Please verify your insurance coverage before your appointment. Co-pays and deductibles may apply.
-                  Contact your insurance provider to confirm coverage for prenatal care and delivery services.
-                </p>
               </div>
             </CardContent>
           </Card>

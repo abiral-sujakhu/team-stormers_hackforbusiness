@@ -12,7 +12,9 @@ import { SubscriptionManager } from "@/lib/subscription-manager"
 const plans = [
 	{
 		name: "Premium Monthly",
+
 		price: "Rs. 249",
+
 		period: "month",
 		description: "Full access to all features, billed monthly.",
 		features: ["All app features included"],
@@ -22,8 +24,10 @@ const plans = [
 	},
 	{
 		name: "Golden Trimester Pack",
+
 		price: "Rs. 1399",
 		period: "whole pregnancy",
+
 		description:
 			"Full access to all features for your entire pregnancy (all 3 trimesters) at a discounted price.",
 		features: ["All app features included"],
@@ -33,7 +37,9 @@ const plans = [
 	},
 	{
 		name: "Trimester Subscription",
+
 		price: "Rs.599",
+
 		period: "trimester",
 		description: "Full access to all features, billed per trimester.",
 		features: ["All app features included"],
@@ -112,6 +118,7 @@ export default function SubscriptionsPage() {
 					Unlock premium features to enhance your pregnancy nutrition journey
 				</p>
 			</div>
+
 
 			<div className="grid md:grid-cols-3 gap-6">
 				{plans.map((plan, index) => {
@@ -232,12 +239,28 @@ export default function SubscriptionsPage() {
 					<CardContent>
 						<CardDescription>
 							Track your baby's development and delivery preparations
+
 						</CardDescription>
 					</CardContent>
 				</Card>
 
 				<Card className="text-center">
 					<CardHeader>
+
+						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
+						<CardTitle className="text-lg">Priority AI Support</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<CardDescription>
+							Get instant, detailed responses from our AI nutrition assistant
+
+						</CardDescription>
+					</CardContent>
+				</Card>
+
+				<Card className="text-center">
+					<CardHeader>
+
 						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
 						<CardTitle className="text-lg">Priority AI Support</CardTitle>
 					</CardHeader>
@@ -250,6 +273,7 @@ export default function SubscriptionsPage() {
 
 				<Card className="text-center">
 					<CardHeader>
+
 						<Calendar className="h-8 w-8 text-purple-600 mx-auto" />
 						<CardTitle className="text-lg">Advanced Planning</CardTitle>
 					</CardHeader>
