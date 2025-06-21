@@ -780,8 +780,8 @@ export default function DeliveryTrackerPage() {
               <Button
                 onClick={() => {
                   toast({
-                    title: "Notes saved",
-                    description: "Your birth plan and notes have been saved.",
+                    title: "Notes Saved",
+                    description: "Your birth plan and notes have been Saved.",
                   })
                 }}
               >
