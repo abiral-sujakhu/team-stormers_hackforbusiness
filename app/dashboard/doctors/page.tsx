@@ -65,7 +65,7 @@ const mockDoctors: Doctor[] = [
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections"],
     languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
-    consultationFee: 200,
+    consultationFee: 400,
   },
   {
     id: 2,
@@ -255,7 +255,7 @@ export default function DoctorsPage() {
 
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="text-sm">
-                      <span className="font-semibold">${doctor.consultationFee}</span>
+                      <span className="font-semibold">Nrs {doctor.consultationFee}</span>
                       <span className="text-gray-500"> consultation</span>
                     </div>
                     <div className="space-x-2">
@@ -352,7 +352,7 @@ export default function DoctorsPage() {
 
                             <div className="flex justify-between items-center pt-4 border-t">
                               <div className="text-sm text-gray-600">
-                                Consultation fee: <span className="font-semibold">${doctor.consultationFee}</span>
+                                Consultation fee: <span className="font-semibold">Nrs {doctor.consultationFee}</span>
                               </div>
                               <Button onClick={handleBookAppointment}>Confirm Booking</Button>
                             </div>

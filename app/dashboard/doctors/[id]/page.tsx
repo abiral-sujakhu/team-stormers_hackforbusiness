@@ -51,9 +51,95 @@ const doctorData = {
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections", "Genetic counseling"],
     languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
-    consultationFee: 200,
+    consultationFee: 400,
     hospitalAffiliations: ["Kathmandu Maternity Center", "Patan Hospital", "Teaching Hospital"],
     awards: ["Top Doctor 2023 - Kathmandu Health Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
+  },
+  "2": {
+    id: 2,
+    name: "Dr. Ram Bahadur Thapa",
+    specialty: "Maternal-Fetal Medicine",
+    rating: 4.8,
+    experience: 15,
+    location: "Patan Hospital",
+    address: "456 Hospital Road, Patan, Nepal",
+    phone: "9801122334",
+    email: "dr.ram@patanhospital.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Ram Bahadur Thapa is an expert in maternal-fetal medicine, helping families with complex pregnancies across Nepal. He completed his fellowship at Patan Hospital and has over 15 years of experience.",
+    education: [
+      "MD - BPKIHS (2006)",
+      "Residency - Patan Hospital (2010)",
+      "Fellowship - Maternal-Fetal Medicine, Patan Hospital (2012)",
+    ],
+    certifications: [
+      "Board Certified in Maternal-Fetal Medicine",
+      "Genetic Counseling Certification",
+      "Advanced Ultrasound Training",
+    ],
+    specializations: ["Fetal diagnostics", "Genetic counseling", "Multiple pregnancies", "Fetal surgery"],
+    languages: ["English", "Nepali"],
+    availability: ["Tuesday", "Wednesday", "Thursday", "Saturday"],
+    consultationFee: 250,
+    hospitalAffiliations: ["Patan Hospital", "Kathmandu Maternity Center"],
+    awards: ["Best Maternal-Fetal Specialist 2022", "Research Excellence Award 2021"],
+  },
+  "3": {
+    id: 3,
+    name: "Dr. Mina Karki",
+    specialty: "Certified Nurse Midwife",
+    rating: 4.7,
+    experience: 8,
+    location: "Biratnagar Birth Center",
+    address: "789 Birth Center Lane, Biratnagar, Nepal",
+    phone: "9845671234",
+    email: "dr.mina@biratnagarbirth.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Mina Karki empowers women through natural childbirth and provides personalized care for families in the eastern region. She is a certified nurse midwife with a passion for holistic care.",
+    education: [
+      "BSc Nursing - Purbanchal University (2012)",
+      "Certified Nurse Midwife - Nepal Nursing Council (2014)",
+    ],
+    certifications: [
+      "Certified Nurse Midwife",
+      "Water Birth Specialist",
+      "Breastfeeding Support Certification",
+    ],
+    specializations: ["Natural birth", "Water birth", "Home birth", "Breastfeeding support"],
+    languages: ["English", "Nepali"],
+    availability: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    consultationFee: 150,
+    hospitalAffiliations: ["Biratnagar Birth Center"],
+    awards: ["Midwife of the Year 2023", "Community Care Award 2022"],
+  },
+  "4": {
+    id: 4,
+    name: "Dr. Bishal Adhikari",
+    specialty: "Perinatologist",
+    rating: 4.9,
+    experience: 18,
+    location: "Pokhara Regional Hospital",
+    address: "321 Regional Hospital Road, Pokhara, Nepal",
+    phone: "9865432109",
+    email: "dr.bishal@pokharahospital.com",
+    image: "/placeholder.svg?height=200&width=200",
+    bio: "Dr. Bishal Adhikari has extensive experience in managing high-risk pregnancies and complications in the western region. He is a leading perinatologist in Pokhara.",
+    education: [
+      "MD - Pokhara University (2004)",
+      "Residency - Pokhara Regional Hospital (2008)",
+      "Fellowship - Perinatology, Kathmandu University (2010)",
+    ],
+    certifications: [
+      "Board Certified in Perinatology",
+      "NICU Coordination Training",
+      "Preterm Labor Management Certification",
+    ],
+    specializations: ["High-risk pregnancies", "Preterm labor", "Pregnancy complications", "NICU coordination"],
+    languages: ["English", "Nepali"],
+    availability: ["Monday", "Tuesday", "Thursday", "Friday"],
+    consultationFee: 300,
+    hospitalAffiliations: ["Pokhara Regional Hospital", "Kathmandu Maternity Center"],
+    awards: ["Perinatologist of the Year 2024", "Patient Care Excellence 2023"],
   },
 }
 
@@ -67,44 +153,112 @@ interface Review {
   verified: boolean
 }
 
-const mockReviews: Review[] = [
-  {
-    id: 1,
-    patientName: "Sarah M.",
-    rating: 5,
-    date: "2024-01-10",
-    comment:
-      "Dr. Johnson was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
-    helpful: 12,
-    verified: true,
-  },
-  {
-    id: 2,
-    patientName: "Maria L.",
-    rating: 5,
-    date: "2024-01-05",
-    comment:
-      "Excellent care during my high-risk pregnancy. Dr. Johnson's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
-    helpful: 8,
-    verified: true,
-  },
-  {
-    id: 3,
-    patientName: "Jennifer K.",
-    rating: 4,
-    date: "2023-12-28",
-    comment:
-      "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
-    helpful: 5,
-    verified: true,
-  },
-]
+const doctorReviews: Record<string, Review[]> = {
+  "1": [
+    {
+      id: 1,
+      patientName: "Sarah Rai",
+      rating: 5,
+      date: "2024-01-10",
+      comment:
+        "Dr. Sharma was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
+      helpful: 12,
+      verified: true,
+    },
+    {
+      id: 2,
+      patientName: "Mona Tamang",
+      rating: 5,
+      date: "2024-01-05",
+      comment:
+        "Excellent care during my high-risk pregnancy. Dr. Sharma's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
+      helpful: 8,
+      verified: true,
+    },
+    {
+      id: 3,
+      patientName: "Jenni K.",
+      rating: 4,
+      date: "2023-12-28",
+      comment:
+        "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
+      helpful: 5,
+      verified: true,
+    },
+  ],
+  "2": [
+    {
+      id: 4,
+      patientName: "Ramesh Shrestha",
+      rating: 5,
+      date: "2024-02-15",
+      comment:
+        "Dr. Ram Bahadur Thapa provided excellent support during our complicated pregnancy. His expertise in fetal diagnostics is unmatched.",
+      helpful: 10,
+      verified: true,
+    },
+    {
+      id: 5,
+      patientName: "Anita Gurung",
+      rating: 4,
+      date: "2024-01-30",
+      comment:
+        "Very thorough and caring. He explained every step and made us feel at ease.",
+      helpful: 6,
+      verified: true,
+    },
+  ],
+  "3": [
+    {
+      id: 6,
+      patientName: "Sunita Karki",
+      rating: 5,
+      date: "2024-03-10",
+      comment:
+        "Dr. Mina Karki was so supportive during my home birth. She made the experience calm and empowering.",
+      helpful: 7,
+      verified: true,
+    },
+    {
+      id: 7,
+      patientName: "Bina Rai",
+      rating: 4,
+      date: "2024-02-22",
+      comment:
+        "Great midwife, very knowledgeable about natural birth and breastfeeding support.",
+      helpful: 4,
+      verified: true,
+    },
+  ],
+  "4": [
+    {
+      id: 8,
+      patientName: "Kamal Adhikari",
+      rating: 5,
+      date: "2024-04-05",
+      comment:
+        "Dr. Bishal Adhikari managed my wife's high-risk pregnancy with great care. We are grateful for his expertise.",
+      helpful: 9,
+      verified: true,
+    },
+    {
+      id: 9,
+      patientName: "Maya Gurung",
+      rating: 5,
+      date: "2024-03-18",
+      comment:
+        "Very experienced and compassionate doctor. Highly recommended for complicated pregnancies.",
+      helpful: 5,
+      verified: true,
+    },
+  ],
+}
 
 export default function DoctorProfilePage() {
   const params = useParams()
   const doctorId = params.id as string
   const doctor = doctorData[doctorId as keyof typeof doctorData]
-  const [reviews, setReviews] = useState<Review[]>(mockReviews)
+  const [reviews, setReviews] = useState<Review[]>(doctorReviews[doctorId] || [])
   const [newReview, setNewReview] = useState("")
   const [newRating, setNewRating] = useState(5)
   const { isPremium } = useSubscription()
@@ -304,17 +458,17 @@ export default function DoctorProfilePage() {
                   <div className="text-sm text-gray-600">Overall Rating</div>
                 </div>
                 <div className="flex-1">
-                  {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center space-x-2">
-                      <span className="text-sm w-8">{rating}★</span>
+                  {[5, 4, 3, 2, 1].map((starValue) => (
+                    <div key={starValue} className="flex items-center space-x-2">
+                      <span className="text-sm w-8">{starValue}★</span>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 h-2 rounded-full"
-                          style={{ width: `${rating === 5 ? 80 : rating === 4 ? 15 : 5}%` }}
+                          style={{ width: `${starValue === 5 ? 80 : starValue === 4 ? 15 : 5}%` }}
                         ></div>
                       </div>
                       <span className="text-sm text-gray-600 w-8">
-                        {rating === 5 ? "80%" : rating === 4 ? "15%" : "5%"}
+                        {starValue === 5 ? "80%" : starValue === 4 ? "15%" : "5%"}
                       </span>
                     </div>
                   ))}
@@ -350,16 +504,6 @@ export default function DoctorProfilePage() {
                         ))}
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
-                      <div className="flex items-center space-x-4 mt-3">
-                        <Button variant="ghost" size="sm">
-                          <ThumbsUp className="h-3 w-3 mr-1" />
-                          Helpful ({review.helpful})
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <ThumbsDown className="h-3 w-3 mr-1" />
-                          Not Helpful
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
