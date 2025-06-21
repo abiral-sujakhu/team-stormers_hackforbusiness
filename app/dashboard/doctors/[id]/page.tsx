@@ -203,7 +203,7 @@ const doctorReviews: Record<string, Review[]> = {
       rating: 4,
       date: "2024-01-30",
       comment:
-        "Very thorough and caring. He explained every step and made us feel at ease.",
+        "very thorough and caring. He explained every step and made us feel at ease.",
       helpful: 6,
       verified: true,
     },
