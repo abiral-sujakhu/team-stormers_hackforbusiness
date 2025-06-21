@@ -546,23 +546,24 @@ export default function DeliveryTrackerPage() {
 
 
 
-      {/* Progress Bar */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Pregnancy Progress</CardTitle>
-          <CardDescription>Your journey to meeting your baby</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <Progress value={(currentWeek / 40) * 100} className="w-full" />
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-              <span>Week 1</span>
-              <span>Week {currentWeek}</span>
-              <span>Week 40</span>
+        {/* Progress Bar */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Pregnancy Progress</CardTitle>
+            <CardDescription>Your journey to meeting your baby</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Progress value={(currentWeek / 40) * 100} className="w-full" />
+              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                <span>Week 1</span>
+                <span>Week {currentWeek}</span>
+                <span>Week 40</span>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
       <Tabs defaultValue="milestones" className="space-y-4">
         <TabsList>

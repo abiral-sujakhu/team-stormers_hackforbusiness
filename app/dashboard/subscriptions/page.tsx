@@ -239,28 +239,12 @@ export default function SubscriptionsPage() {
 					<CardContent>
 						<CardDescription>
 							Track your baby's development and delivery preparations
-
 						</CardDescription>
 					</CardContent>
 				</Card>
 
 				<Card className="text-center">
 					<CardHeader>
-
-						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
-						<CardTitle className="text-lg">Priority AI Support</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<CardDescription>
-							Get instant, detailed responses from our AI nutrition assistant
-
-						</CardDescription>
-					</CardContent>
-				</Card>
-
-				<Card className="text-center">
-					<CardHeader>
-
 						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
 						<CardTitle className="text-lg">Priority AI Support</CardTitle>
 					</CardHeader>
@@ -273,7 +257,6 @@ export default function SubscriptionsPage() {
 
 				<Card className="text-center">
 					<CardHeader>
-
 						<Calendar className="h-8 w-8 text-purple-600 mx-auto" />
 						<CardTitle className="text-lg">Advanced Planning</CardTitle>
 					</CardHeader>

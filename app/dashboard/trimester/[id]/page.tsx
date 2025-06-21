@@ -149,16 +149,16 @@ const detailedRecipes = {
       "Reduce heat to low and keep stirring until the mixture thickens to a smooth, dough-like consistency. Cook for 5–7 minutes, stirring occasionally.",
       "Serve the hot Rayo ko Saag alongside the freshly made Dhido, shaping the dhido into small balls or servings on the plate"
     ],
-    tips: [
-      "Rinse lentils thoroughly until water runs clear to remove any debris",
-      "Don't overcook spinach to retain maximum folate and iron content",
-      "Add a squeeze of lemon juice before serving for enhanced iron absorption",
-      "For creamier texture, blend half the curry and mix back in",
-      "Store leftovers in refrigerator for up to 3 days"
+    tips: [     
+"Wash thoroughly to remove any dirt or pesticides",
+"Cook well to improve iron absorption and digestion",
+"Pair with lemon or tomato to boost vitamin C for better iron absorption",
+"Avoid overcooking to preserve nutrients",
+"Consume in moderation if you have thyroid issues due to goitrogens"
+
     ],
     pregnancyBenefits:
-      "This recipe is a powerhouse for first trimester nutrition. The combination of lentils and spinach provides essential folate for neural tube development, iron to prevent anemia, and plant-based protein for your baby's growth. The coconut milk adds healthy fats for brain development.",
-    image: "/placeholder.svg?height=300&width=400",
+    "Rayo ko saag is rich in folate, calcium, iron, and vitamin K, which support fetal neural development, help in blood formation, strengthen bones, and reduce the risk of birth defects, making it a healthy choice during pregnancy.",
     safetyNotes: [
       "Wash and cook mustard greens thoroughly to avoid harmful bacteria.",
       "Use mustard oil moderately or substitute with milder oils if preferred.",
