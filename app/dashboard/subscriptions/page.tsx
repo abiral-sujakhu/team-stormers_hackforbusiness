@@ -12,7 +12,9 @@ import { SubscriptionManager } from "@/lib/subscription-manager"
 const plans = [
 	{
 		name: "Premium Monthly",
-		price: "$20",
+
+		price: "Rs. 249",
+
 		period: "month",
 		description: "Full access to all features, billed monthly.",
 		features: ["All app features included"],
@@ -22,10 +24,10 @@ const plans = [
 	},
 	{
 		name: "Golden Trimester Pack",
-		price: "$100",
+
+		price: "Rs. 1399",
 		period: "whole pregnancy",
-		originalPrice: "$150",
-		savings: "Save $50",
+
 		description:
 			"Full access to all features for your entire pregnancy (all 3 trimesters) at a discounted price.",
 		features: ["All app features included"],
@@ -35,7 +37,9 @@ const plans = [
 	},
 	{
 		name: "Trimester Subscription",
-		price: "$50",
+
+		price: "Rs.599",
+
 		period: "trimester",
 		description: "Full access to all features, billed per trimester.",
 		features: ["All app features included"],
@@ -115,39 +119,6 @@ export default function SubscriptionsPage() {
 				</p>
 			</div>
 
-			{isPremium && (
-				<Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<Crown className="h-5 w-5 text-purple-600" />
-							<span>Premium Active</span>
-							<Sparkles className="h-4 w-4 text-purple-500 animate-pulse" />
-						</CardTitle>
-						<CardDescription>
-							You're currently enjoying all premium features. Thank you for choosing Aahar Premium!
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="flex items-center justify-between">
-							<div className="flex items-center space-x-4">
-								<Badge className="bg-purple-600 text-white">
-									{subscriptionDetails?.subscriptionType === "premium_yearly"
-										? "Premium Yearly"
-										: "Premium Monthly"}
-								</Badge>
-								<span className="text-sm text-purple-700 dark:text-purple-300">
-									All premium features unlocked
-								</span>
-							</div>
-							{subscriptionDetails?.expiresAt && (
-								<div className="text-sm text-gray-600 dark:text-gray-400">
-									Expires: {new Date(subscriptionDetails.expiresAt).toLocaleDateString()}
-								</div>
-							)}
-						</div>
-					</CardContent>
-				</Card>
-			)}
 
 			<div className="grid md:grid-cols-3 gap-6">
 				{plans.map((plan, index) => {
@@ -187,14 +158,6 @@ export default function SubscriptionsPage() {
 										<span className="text-4xl font-bold">{plan.price}</span>
 										<span className="text-gray-600 dark:text-gray-400">/{plan.period}</span>
 									</div>
-									{plan.originalPrice && (
-										<div className="text-sm text-gray-500">
-											<span className="line-through">{plan.originalPrice}/year</span>
-											<Badge variant="secondary" className="ml-2">
-												{plan.savings}
-											</Badge>
-										</div>
-									)}
 								</div>
 								<CardDescription>{plan.description}</CardDescription>
 							</CardHeader>
@@ -276,12 +239,28 @@ export default function SubscriptionsPage() {
 					<CardContent>
 						<CardDescription>
 							Track your baby's development and delivery preparations
+
 						</CardDescription>
 					</CardContent>
 				</Card>
 
 				<Card className="text-center">
 					<CardHeader>
+
+						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
+						<CardTitle className="text-lg">Priority AI Support</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<CardDescription>
+							Get instant, detailed responses from our AI nutrition assistant
+
+						</CardDescription>
+					</CardContent>
+				</Card>
+
+				<Card className="text-center">
+					<CardHeader>
+
 						<MessageSquare className="h-8 w-8 text-green-600 mx-auto" />
 						<CardTitle className="text-lg">Priority AI Support</CardTitle>
 					</CardHeader>
@@ -294,6 +273,7 @@ export default function SubscriptionsPage() {
 
 				<Card className="text-center">
 					<CardHeader>
+
 						<Calendar className="h-8 w-8 text-purple-600 mx-auto" />
 						<CardTitle className="text-lg">Advanced Planning</CardTitle>
 					</CardHeader>

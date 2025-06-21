@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,7 +20,7 @@ interface Message {
 const initialMessages: Message[] = [
   {
     id: 1,
-    text: "Hello! I'm your AI nutrition assistant. I'm here to help you with pregnancy nutrition questions. How can I support you today? 🤱",
+    text: "Hello! I'm your AI nutrition assistant. I'm here to help you with pregnancy nutrition questions. How can I support you today? ",
     sender: "bot",
     timestamp: new Date(),
   },
@@ -51,12 +50,19 @@ export default function ChatbotPage() {
     scrollToBottom()
   }, [messages])
 
-  const generateBotResponse = (userMessage: string): string => {
+
+ 
+  const generateBotResponse = (userMessage: string): string | null => {
     const lowerMessage = userMessage.toLowerCase().trim()
 
-    // Highly specific and responsive answers
-    if (/\b(first trimester|avoid|unsafe foods?|early pregnancy)\b/.test(lowerMessage)) {
-      return "In the first trimester, avoid raw/undercooked meats, fish high in mercury (shark, swordfish, king mackerel), unpasteurized dairy, and excess caffeine. Wash fruits/vegetables well. Focus on folate-rich foods (leafy greens, lentils, fortified cereals). Would you like a list of safe Nepali snacks or recipes?"
+    const greetings = ["hi", "hello", "hey", "good morning", "good evening"]
+    if (greetings.includes(lowerMessage)) {
+      return "Hi there! 👋 I'm your pregnancy nutrition assistant. Ask me something like 'What foods should I avoid in my first trimester?' "
+    }
+
+    if (lowerMessage.includes("first trimester") || lowerMessage.includes("avoid")) {
+      return "During your first trimester, it's important to avoid raw or undercooked meats, fish high in mercury (like shark, swordfish), unpasteurized dairy products, and excessive caffeine. Focus on folate-rich foods like leafy greens and fortified cereals. Would you like specific recipe suggestions?"
+
     }
 
     if (/\bprotein\b/.test(lowerMessage)) {
@@ -82,6 +88,7 @@ export default function ChatbotPage() {
     if (/\b(morning sickness|nausea|vomit|vomiting|feel sick)\b/.test(lowerMessage)) {
       return "For morning sickness: eat small, frequent meals, try ginger tea, avoid spicy/fatty foods, and keep crackers by your bed. Bananas, rice, and curd are gentle on the stomach. Want more home remedies or a bland meal plan?"
     }
+
 
     if (/\b(weight gain|how much weight|gain weight)\b/.test(lowerMessage)) {
       return "Healthy weight gain depends on your pre-pregnancy BMI. On average: 1-2kg in the first trimester, then 0.5kg/week. Your doctor can give you a personalized target. Want a weight gain chart or tips to manage weight?"
@@ -115,10 +122,12 @@ export default function ChatbotPage() {
       return "For high blood pressure, reduce salt, avoid processed foods, eat more fruits/vegetables, and stay active. Always follow your doctor's advice. Want a low-salt meal plan?"
     }
 
+
     // Default fallback
     return "I'm here to help with pregnancy nutrition! Please ask about foods, supplements, meal plans, or any specific concern. For medical emergencies, always consult your doctor."
   }
 
+  // ✅ REPLACED handleSendMessage TO SKIP NULL BOT RESPONSE
   const handleSendMessage = async () => {
     if (!inputText.trim()) return
 
@@ -133,11 +142,16 @@ export default function ChatbotPage() {
     setInputText("")
     setIsTyping(true)
 
-    // Simulate typing delay
     setTimeout(() => {
+      const botText = generateBotResponse(userMessage.text)
+      if (!botText) {
+        setIsTyping(false)
+        return
+      }
+
       const botResponse: Message = {
         id: messages.length + 2,
-        text: generateBotResponse(inputText),
+        text: botText,
         sender: "bot",
         timestamp: new Date(),
       }
@@ -251,7 +265,6 @@ export default function ChatbotPage() {
         </CardHeader>
 
         <CardContent className="flex-1 flex flex-col p-0">
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
@@ -302,7 +315,6 @@ export default function ChatbotPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
           <div className="border-t p-4">
             <div className="flex space-x-2">
               <Input

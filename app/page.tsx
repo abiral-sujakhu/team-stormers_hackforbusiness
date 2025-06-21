@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Heart, Baby, Utensils, Shield, Star, ArrowRight, Sparkles } from "lucide-react"
+import { Heart, Baby, Utensils, Shield, Star,ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
+import React from "react";
 
 export default function LandingPage() {
   return (
@@ -49,7 +50,7 @@ export default function LandingPage() {
             </div>
           </div>
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
-            Get personalized nutrition guidance for every trimester of your pregnancy. From essential nutrients to
+            Get Personalized nutrition guidance for every trimester of your pregnancy. From essential nutrients to
             delicious recipes, we've got you covered with expert-backed content.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -59,7 +60,7 @@ export default function LandingPage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Join 10,000+ expecting mothers</p>
+            {/* <p className="text-sm text-gray-500 dark:text-gray-400">Join 10,000+ expecting mothers</p> */}
           </div>
         </div>
 
@@ -122,25 +123,21 @@ export default function LandingPage() {
               {
                 title: "Meal Planning",
                 description: "Create personalized meal plans with shopping lists",
-                image: "🍽️",
                 features: ["Weekly meal plans", "Shopping lists", "Recipe favorites"],
               },
               {
                 title: "Baby Tracker",
                 description: "Track your baby's development week by week",
-                image: "👶",
                 features: ["Growth milestones", "Development updates", "Preparation checklist"],
               },
               {
                 title: "Expert Support",
                 description: "Connect with certified nutritionists and doctors",
-                image: "👩‍⚕️",
                 features: ["Doctor appointments", "Expert consultations", "24/7 AI support"],
               },
             ].map((feature, index) => (
               <Card key={index} className="card-hover glass-effect border-0 shadow-xl overflow-hidden">
                 <CardHeader className="text-center pb-4">
-                  <div className="text-6xl mb-4">{feature.image}</div>
                   <CardTitle className="text-2xl font-bold">{feature.title}</CardTitle>
                   <CardDescription className="text-base">{feature.description}</CardDescription>
                 </CardHeader>
@@ -189,18 +186,18 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="flex justify-center items-center space-x-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-center">
+                {/* <div className="text-center">
                   <div className="text-2xl font-bold text-pink-500">10,000+</div>
                   <div className="text-sm text-gray-500">Happy Mothers</div>
-                </div>
-                <div className="text-center">
+                </div> */}
+                {/* <div className="text-center">
                   <div className="text-2xl font-bold text-purple-500">500+</div>
                   <div className="text-sm text-gray-500">Healthy Recipes</div>
-                </div>
-                <div className="text-center">
+                </div> */}
+                {/* <div className="text-center">
                   <div className="text-2xl font-bold text-blue-500">24/7</div>
                   <div className="text-sm text-gray-500">AI Support</div>
-                </div>
+                </div> */}
               </div>
             </CardContent>
           </Card>

@@ -284,13 +284,11 @@ export default function DeliveryTrackerPage() {
   const { isPremium, upgradeToPremium, refreshSubscriptionStatus } = useSubscription()
   const { toast } = useToast()
 
-  // Add state for contraction timer
-  // const [contractionTimer, setContractionTimer] = useState(0)
-  // const [isTimerRunning, setIsTimerRunning] = useState(false)
-  // const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null)
+
 
   useEffect(() => {
-    // Refresh subscription status when component mounts
+  
+
     refreshSubscriptionStatus();
     // Save checklist to localStorage whenever it changes
     saveChecklist(checklist);
@@ -404,39 +402,6 @@ export default function DeliveryTrackerPage() {
     }
   }
 
-  // // Add timer functions
-  // const startTimer = () => {
-  //   if (!isTimerRunning) {
-  //     setIsTimerRunning(true)
-  //     const interval = setInterval(() => {
-  //       setContractionTimer((prev) => prev + 1)
-  //     }, 1000)
-  //     setTimerInterval(interval)
-  //   }
-  // }
-
-  // const stopTimer = () => {
-  //   if (isTimerRunning && timerInterval) {
-  //     setIsTimerRunning(false)
-  //     clearInterval(timerInterval)
-  //     setTimerInterval(null)
-  //   }
-  // }
-
-  // const resetTimer = () => {
-  //   setIsTimerRunning(false)
-  //   setContractionTimer(0)
-  //   if (timerInterval) {
-  //     clearInterval(timerInterval)
-  //     setTimerInterval(null)
-  //   }
-  // }
-
-  // const formatTime = (seconds: number) => {
-  //   const mins = Math.floor(seconds / 60)
-  //   const secs = seconds % 60
-  //   return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
-  // }
 
   console.log("Delivery Tracker - isPremium:", isPremium)
 
@@ -492,7 +457,7 @@ export default function DeliveryTrackerPage() {
             Track your baby's development and prepare for delivery
           </p>
         </div>
-        <Badge className="bg-purple-600 text-white">Premium Active ✨</Badge>
+        <Badge className="bg-purple-600 text-white">Premium Active</Badge>
       </div>
 
       {/* Input for Current Week */}
@@ -579,20 +544,7 @@ export default function DeliveryTrackerPage() {
           </CardContent>
         </Card>
 
-        {/* <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Preparation</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.percentage}%</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.completed} of {stats.total} tasks completed
-            </p>
-          </CardContent>
-        </Card> */}
 
-      </div>
 
       {/* Progress Bar */}
       <Card>
@@ -830,8 +782,8 @@ export default function DeliveryTrackerPage() {
               <Button
                 onClick={() => {
                   toast({
-                    title: "Notes saved",
-                    description: "Your birth plan and notes have been saved.",
+                    title: "Notes Saved",
+                    description: "Your birth plan and notes have been Saved.",
                   })
                 }}
               >
@@ -871,75 +823,11 @@ export default function DeliveryTrackerPage() {
 
       {/* Labor Preparation Section */}
       <Card className="mt-6">
-        {/* <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Clock className="h-5 w-5 text-red-600" />
-            <span>Labor Preparation</span>
-          </CardTitle>
-          <CardDescription>Tools to help you prepare for and track early labor</CardDescription>
-        </CardHeader> */}
-        <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* <Card> */}
-              {/* <CardHeader>
-                <CardTitle className="text-lg">Contraction Timer</CardTitle>
-                <CardDescription>Track the timing and duration of contractions</CardDescription>
-              </CardHeader> */}
-              {/* <CardContent> */}
-                {/* <div className="text-center space-y-4">
-                  <div className="text-3xl font-bold text-blue-600">{formatTime(contractionTimer)}</div>
-                  <div className="space-x-2">
-                    <Button variant="outline" onClick={startTimer} disabled={isTimerRunning}>
-                      Start Timer
-                    </Button>
-                    <Button variant="outline" onClick={stopTimer} disabled={!isTimerRunning}>
-                      Stop
-                    </Button>
-                    <Button variant="outline" onClick={resetTimer}>
-                      Reset
-                    </Button>
-                  </div> */}
-                  {/* <p className="text-sm text-gray-600">
-                    Time contractions to help determine when to go to the hospital
-                  </p> */}
-                {/* </div> */}
-              {/* </CardContent> */}
-            {/* </Card> */}
 
-            <Card>
-              {/* <CardHeader>
-                <CardTitle className="text-lg">Hospital Bag Status</CardTitle>
-                <CardDescription>Quick overview of your hospital bag preparation</CardDescription>
-              </CardHeader> */}
-              {/* <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Hospital bag packed</span>
-                    <Badge variant="outline">Ready</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Car seat installed</span>
-                    <Badge variant="secondary">Pending</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Emergency contacts ready</span>
-                    <Badge variant="outline">Ready</Badge>
-                  </div>
-                  <Button
-                    className="w-full mt-4"
-                    variant="outline"
-                    onClick={() => {
-                      // Switch to checklist tab
-                      const checklistTab = document.querySelector('[value="checklist"]') as HTMLElement
-                      checklistTab?.click()
-                    }}
-                  >
-                    Review Full Checklist
-                  </Button> */}
-                {/* </div>
-              </CardContent> */}
-            </Card>
-          </div>
+
+        <CardContent className="space-y-4">
+  
+
 
           {/* Labor Signs Information */}
           <Card>
