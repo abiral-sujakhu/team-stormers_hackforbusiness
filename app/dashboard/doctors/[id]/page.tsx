@@ -28,21 +28,20 @@ import { useToast } from "@/hooks/use-toast"
 const doctorData = {
   "1": {
     id: 1,
-    name: "Dr. Sarah Johnson",
+    name: "Dr. Sita Sharma",
     specialty: "Obstetrician & Gynecologist",
     rating: 4.9,
-    reviews: 127,
     experience: 12,
-    location: "Women's Health Center",
-    address: "123 Medical Plaza, Suite 200, City, State 12345",
-    phone: "(555) 123-4567",
-    email: "dr.johnson@womenshealth.com",
+    location: "Kathmandu Maternity Center",
+    address: "123 Medical Plaza, Suite 200, Kathmandu, Nepal",
+    phone: "9812345678",
+    email: "dr.sita@kathmandumaternity.com",
     image: "/placeholder.svg?height=200&width=200",
-    bio: "Dr. Johnson specializes in high-risk pregnancies and has delivered over 2,000 babies. She is passionate about providing comprehensive prenatal care and supporting women through their pregnancy journey. She completed her residency at Johns Hopkins and has been practicing for over 12 years.",
+    bio: "Dr. Sita Sharma specializes in high-risk pregnancies and is dedicated to providing compassionate care to mothers throughout Nepal. She completed her residency at Tribhuvan University Teaching Hospital and has been practicing for over 12 years.",
     education: [
-      "MD - Harvard Medical School (2008)",
-      "Residency - Johns Hopkins Hospital (2012)",
-      "Fellowship - Maternal-Fetal Medicine, UCLA (2014)",
+      "MD - Institute of Medicine, TU (2008)",
+      "Residency - TUTH (2012)",
+      "Fellowship - Maternal-Fetal Medicine, Patan Hospital (2014)",
     ],
     certifications: [
       "Board Certified in Obstetrics & Gynecology",
@@ -50,13 +49,11 @@ const doctorData = {
       "Advanced Life Support in Obstetrics (ALSO)",
     ],
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections", "Genetic counseling"],
-    languages: ["English", "Spanish"],
+    languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
     consultationFee: 200,
-    acceptsInsurance: true,
-    insuranceAccepted: ["Blue Cross Blue Shield", "Aetna", "Cigna", "UnitedHealth"],
-    hospitalAffiliations: ["City General Hospital", "Women's Medical Center", "Regional Medical Center"],
-    awards: ["Top Doctor 2023 - City Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
+    hospitalAffiliations: ["Kathmandu Maternity Center", "Patan Hospital", "Teaching Hospital"],
+    awards: ["Top Doctor 2023 - Kathmandu Health Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
   },
 }
 
@@ -186,7 +183,6 @@ export default function DoctorProfilePage() {
                 <div className="flex items-center space-x-1">
                   <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-semibold">{doctor.rating}</span>
-                  <span className="text-gray-500">({doctor.reviews} reviews)</span>
                 </div>
                 <Badge variant="secondary">{doctor.experience} years experience</Badge>
                 <Badge variant="outline">Board Certified</Badge>
@@ -210,44 +206,6 @@ export default function DoctorProfilePage() {
                   <span className="text-sm">Available {doctor.availability.length} days/week</span>
                 </div>
               </div>
-
-              {/* Add click handlers for the main action buttons: */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
-                <Button
-                  onClick={() => {
-                    toast({
-                      title: "Booking appointment",
-                      description: "Opening appointment booking form...",
-                    })
-                  }}
-                >
-                  Book Appointment
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    toast({
-                      title: "Doctor saved",
-                      description: `${doctor.name} has been saved to your favorites.`,
-                    })
-                  }}
-                >
-                  <Heart className="h-4 w-4 mr-2" />
-                  Save Doctor
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    toast({
-                      title: "Message sent",
-                      description: "Your message has been sent to the doctor's office.",
-                    })
-                  }}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Message
-                </Button>
-              </div>
             </div>
           </div>
         </CardContent>
@@ -255,12 +213,10 @@ export default function DoctorProfilePage() {
 
       {/* Detailed Information Tabs */}
       <Tabs defaultValue="about" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="about">About</TabsTrigger>
-          <TabsTrigger value="specializations">Specializations</TabsTrigger>
           <TabsTrigger value="reviews">Reviews</TabsTrigger>
           <TabsTrigger value="availability">Availability</TabsTrigger>
-          <TabsTrigger value="insurance">Insurance</TabsTrigger>
         </TabsList>
 
         <TabsContent value="about" className="space-y-4">
@@ -324,46 +280,12 @@ export default function DoctorProfilePage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="specializations" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Areas of Expertise</CardTitle>
-              <CardDescription>Dr. {doctor.name.split(" ")[1]}'s specialized areas of practice</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                {doctor.specializations.map((spec, index) => (
-                  <Card key={index}>
-                    <CardContent className="pt-4">
-                      <h4 className="font-semibold">{spec}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        Specialized care and treatment in {spec.toLowerCase()}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <div className="mt-6">
-                <h4 className="font-semibold mb-3">Languages Spoken</h4>
-                <div className="flex flex-wrap gap-2">
-                  {doctor.languages.map((lang, index) => (
-                    <Badge key={index} variant="secondary">
-                      {lang}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="reviews" className="space-y-4">
           {/* Review Summary */}
           <Card>
             <CardHeader>
               <CardTitle>Patient Reviews</CardTitle>
-              <CardDescription>{doctor.reviews} verified patient reviews</CardDescription>
+              <CardDescription>{reviews.length} verified patient reviews</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-4">
@@ -533,79 +455,6 @@ export default function DoctorProfilePage() {
                   <li>• Please arrive 15 minutes early for your appointment</li>
                   <li>• Cancellations must be made 24 hours in advance</li>
                 </ul>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="insurance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Insurance & Payment</CardTitle>
-              <CardDescription>Payment options and insurance information</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h4 className="font-semibold mb-3">Consultation Fees</h4>
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <span>Initial Consultation</span>
-                    <span className="font-semibold">${doctor.consultationFee}</span>
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span>Follow-up Visit</span>
-                    <span className="font-semibold">$150</span>
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span>Ultrasound</span>
-                    <span className="font-semibold">$250</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Insurance Accepted</h4>
-                <div className="grid md:grid-cols-2 gap-2">
-                  {doctor.insuranceAccepted.map((insurance, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-2 p-2 bg-green-50 dark:bg-green-900/20 rounded"
-                    >
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm">{insurance}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Payment Methods</h4>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Cash</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Credit/Debit Cards</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Health Savings Account (HSA)</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm">Flexible Spending Account (FSA)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-                <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Insurance Note</h4>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  Please verify your insurance coverage before your appointment. Co-pays and deductibles may apply.
-                  Contact your insurance provider to confirm coverage for prenatal care and delivery services.
-                </p>
               </div>
             </CardContent>
           </Card>
