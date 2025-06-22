@@ -218,7 +218,11 @@ export default function MealPlanPage() {
     )
   }
 
-  const filteredRecipes = savedRecipes.filter((recipe: Recipe) => recipe.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredRecipes = savedRecipes.filter(
+  (recipe: Recipe) =>
+    recipe.name?.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
   const getCategoryColor = (category: string) => {
     const colors = {

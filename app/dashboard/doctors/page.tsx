@@ -1,6 +1,5 @@
 "use client"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -17,11 +16,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Stethoscope, Star, MapPin, Phone, Calendar, Clock, User, Search } from "lucide-react"
+import { Stethoscope, Star, Phone, Calendar, Clock, User } from "lucide-react"
 import { useSubscription } from "@/components/subscription-provider"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 
+// Interfaces
 interface Doctor {
   id: number
   name: string
@@ -38,11 +38,10 @@ interface Doctor {
   availability: string[]
   consultationFee: number
 }
-
 interface Appointment {
   id: number
-  doctorId: number
-  doctorName: string
+  doctor_id: number
+  doctor_name: string
   date: string
   time: string
   type: "consultation" | "checkup" | "ultrasound"
@@ -50,6 +49,7 @@ interface Appointment {
   notes?: string
 }
 
+// Example doctors (keep using this)
 const mockDoctors: Doctor[] = [
   {
     id: 1,
@@ -97,7 +97,7 @@ const mockDoctors: Doctor[] = [
     specializations: ["Natural birth", "Water birth", "Home birth", "Breastfeeding support"],
     languages: ["English", "Nepali"],
     availability: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    consultationFee: 150,
+    consultationFee: 500,
   },
   {
     id: 4,
@@ -115,97 +115,100 @@ const mockDoctors: Doctor[] = [
     availability: ["Monday", "Tuesday", "Thursday", "Friday"],
     consultationFee: 300,
   },
-]
-
-const mockAppointments: Appointment[] = []
+];
 
 export default function DoctorsPage() {
-  const [doctors, setDoctors] = useState<Doctor[]>(mockDoctors)
-  const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedSpecialty, setSelectedSpecialty] = useState("All specialties")
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null)
-  const [bookingDate, setBookingDate] = useState("")
-  const [bookingTime, setBookingTime] = useState("")
-  const [bookingType, setBookingType] = useState("")
-  const [bookingNotes, setBookingNotes] = useState("")
-  const { isPremium, upgradeToPremium } = useSubscription()
-  const { toast } = useToast()
+  // State variables
+  const [doctors] = useState<Doctor[]>(mockDoctors);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("All specialties");
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookingTime, setBookingTime] = useState("");
+  const [bookingType, setBookingType] = useState("");
+  const [bookingNotes, setBookingNotes] = useState("");
+  const { isPremium, upgradeToPremium } = useSubscription();
+  const { toast } = useToast();
 
+  // Replace this with your actual auth logic (Supabase, NextAuth, etc)
+  const userEmail = "demo@aahar.com"; // For testing, hardcoded. Replace with real user email.
+
+  // Filter logic for doctors
   const filteredDoctors = doctors.filter((doctor) => {
     const matchesSearch =
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesSpecialty = selectedSpecialty === "All specialties" || doctor.specialty.includes(selectedSpecialty)
-    return matchesSearch && matchesSpecialty
-  })
+      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSpecialty = selectedSpecialty === "All specialties" || doctor.specialty.includes(selectedSpecialty);
+    return matchesSearch && matchesSpecialty;
+  });
 
-  const handleBookAppointment = () => {
-    if (!selectedDoctor || !bookingDate || !bookingTime || !bookingType) {
+  // Fetch user's appointments from backend
+  const fetchAppointments = async () => {
+    if (!userEmail) return;
+    const res = await fetch("/api/get-appointments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_email: userEmail }),
+    });
+    const result = await res.json();
+    if (result.success) setAppointments(result.appointments);
+  };
+
+  // Fetch appointments on mount
+  useEffect(() => {
+    fetchAppointments();
+    // eslint-disable-next-line
+  }, []);
+
+  // Book appointment via backend and refresh list
+  const handleBookAppointment = async () => {
+    if (!selectedDoctor || !bookingDate || !bookingTime || !bookingType || !userEmail) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields.",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    const newAppointment: Appointment = {
-      id: Date.now(),
-      doctorId: selectedDoctor.id,
-      doctorName: selectedDoctor.name,
-      date: bookingDate,
-      time: bookingTime,
-      type: bookingType as "consultation" | "checkup" | "ultrasound",
-      status: "upcoming",
-      notes: bookingNotes,
+    const res = await fetch("/api/book-appointment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_email: userEmail,
+        doctor_id: selectedDoctor.id,
+        doctor_name: selectedDoctor.name,
+        date: bookingDate,
+        time: bookingTime,
+        type: bookingType,
+        notes: bookingNotes,
+      }),
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      toast({
+        title: "Appointment booked!",
+        description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
+      });
+      setSelectedDoctor(null);
+      setBookingDate("");
+      setBookingTime("");
+      setBookingType("");
+      setBookingNotes("");
+      fetchAppointments(); // Refresh after booking
+    } else {
+      toast({
+        title: "Booking failed",
+        description: result.message || "Try again.",
+        variant: "destructive",
+      });
     }
+  };
 
-    setAppointments((prev) => [...prev, newAppointment])
-    setBookingDate("")
-    setBookingTime("")
-    setBookingType("")
-    setBookingNotes("")
-    setSelectedDoctor(null)
 
-    toast({
-      title: "Appointment booked!",
-      description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
-    })
-  }
 
-  if (!isPremium) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Doctor Appointments</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Find and book appointments with pregnancy specialists</p>
-        </div>
-
-        <Card className="text-center py-12">
-          <CardContent>
-            <Stethoscope className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Premium Feature</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Upgrade to Premium to access our network of pregnancy specialists and book appointments directly through
-              the app.
-            </p>
-            <Button
-              onClick={() => {
-                upgradeToPremium();
-                toast({
-                  title: "Welcome to Premium!",
-                  description: "You now have access to doctor appointments and all premium features.",
-                });
-              }}
-            >
-              Upgrade to Premium
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
@@ -255,7 +258,7 @@ export default function DoctorsPage() {
 
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="text-sm">
-                      <span className="font-semibold">Nrs {doctor.consultationFee}</span>
+                      <span className="font-semibold">Rs.{doctor.consultationFee}</span>
                       <span className="text-gray-500"> consultation</span>
                     </div>
                     <div className="space-x-2">
@@ -352,7 +355,7 @@ export default function DoctorsPage() {
 
                             <div className="flex justify-between items-center pt-4 border-t">
                               <div className="text-sm text-gray-600">
-                                Consultation fee: <span className="font-semibold">Nrs {doctor.consultationFee}</span>
+                                Consultation fee: <span className="font-semibold">Rs.{doctor.consultationFee}</span>
                               </div>
                               <Button onClick={handleBookAppointment}>Confirm Booking</Button>
                             </div>
@@ -386,7 +389,7 @@ export default function DoctorsPage() {
                     <div className="flex items-center justify-between">
                       <CardTitle className="flex items-center space-x-2">
                         <User className="h-5 w-5" />
-                        <span>{appointment.doctorName}</span>
+                        <span>{appointment.doctor_name}</span>
                       </CardTitle>
                       <Badge
                         variant={
@@ -435,7 +438,7 @@ export default function DoctorsPage() {
                             )
                             toast({
                               title: "Appointment cancelled",
-                              description: `Your appointment with ${appointment.doctorName} has been cancelled.`,
+                              description: `Your appointment with ${appointment.doctor_name} has been cancelled.`,
                             })
                           }}
                         >

@@ -18,7 +18,6 @@ import {
   CheckCircle,
   Lightbulb,
   Baby,
-  Image,
 } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -100,7 +99,7 @@ const trimesterData = {
         recipes: [
           { id: 13, name: "Okhar Ra Chaku Laddu (Walnut & Molasses Ball)", time: "25 min", premium: true },
           { id: 14, name: "Tisi ko Achar (Flaxseed Pickle)", time: "10 min", premium: false },
-          { id: 15, name: "Maxaa Jhol (Nepali Fish Curry)", time: "25 min", premium: false },
+          { id: 15, name: "Machhaa Jhol (Nepali Fish Curry)", time: "25 min", premium: false },
         ],
       },
       {
@@ -150,16 +149,15 @@ const detailedRecipes = {
       "Reduce heat to low and keep stirring until the mixture thickens to a smooth, dough-like consistency. Cook for 5–7 minutes, stirring occasionally.",
       "Serve the hot Rayo ko Saag alongside the freshly made Dhido, shaping the dhido into small balls or servings on the plate"
     ],
-    tips: [     
-"Wash thoroughly to remove any dirt or pesticides",
-"Cook well to improve iron absorption and digestion",
-"Pair with lemon or tomato to boost vitamin C for better iron absorption",
-"Avoid overcooking to preserve nutrients",
-"Consume in moderation if you have thyroid issues due to goitrogens"
-
+    tips: [
+      "Rinse lentils thoroughly until water runs clear to remove any debris",
+      "Don't overcook spinach to retain maximum folate and iron content",
+      "Add a squeeze of lemon juice before serving for enhanced iron absorption",
+      "For creamier texture, blend half the curry and mix back in",
+      "Store leftovers in refrigerator for up to 3 days"
     ],
     pregnancyBenefits:
-    "Rayo ko saag is rich in folate, calcium, iron, and vitamin K, which support fetal neural development, help in blood formation, strengthen bones, and reduce the risk of birth defects, making it a healthy choice during pregnancy.",
+      "Rayo ko saag is rich in folate, calcium, iron, and vitamin K, which support fetal neural development, help in blood formation, strengthen bones, and reduce the risk of birth defects, making it a healthy choice during pregnancy.",
     image:"/dhido.jpg?height=300&width=400",
     safetyNotes: [
       "Wash and cook mustard greens thoroughly to avoid harmful bacteria.",
@@ -793,7 +791,7 @@ const detailedRecipes = {
   },
 
   15: {
-    name: "Maxaa Jhol (Nepali Fish Curry)",
+    name: "Machhaa Jhol (Nepali Fish Curry)",
     time: "15 min",
     servings: 2,
     calories: 240,
@@ -1197,19 +1195,29 @@ export default function TrimesterPage() {
                           </Button>
                         </div>
                         <div className="flex space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => saveRecipeToMealPlan(recipe)}
-                            disabled={!canAccessRecipe(recipe)}
-                            className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl"
-                          >
-                            <BookmarkPlus
-                              className={`h-5 w-5 ${
-                                savedRecipes.includes(recipe.id) ? "fill-blue-500 text-blue-500" : "text-gray-400"
-                              }`}
-                            />
-                          </Button>
+                         <Button
+  variant="ghost"
+  size="sm"
+  onClick={() => {
+    setSavedRecipes((prev) =>
+      prev.includes(recipe.id)
+        ? prev.filter((id) => id !== recipe.id)
+        : [...prev, recipe.id]
+    );
+    saveRecipeToMealPlan(recipe); // keep saving to localStorage if you want
+  }}
+  disabled={!canAccessRecipe(recipe)}
+  className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl"
+>
+  <BookmarkPlus
+    className={`h-5 w-5 ${
+      savedRecipes.includes(recipe.id)
+        ? "fill-blue-500 text-blue-500"
+        : "text-gray-400"
+    }`}
+  />
+</Button>
+
                           <Button
                             variant="ghost"
                             size="sm"

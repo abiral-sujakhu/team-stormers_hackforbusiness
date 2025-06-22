@@ -153,112 +153,44 @@ interface Review {
   verified: boolean
 }
 
-const doctorReviews: Record<string, Review[]> = {
-  "1": [
-    {
-      id: 1,
-      patientName: "Sarah Rai",
-      rating: 5,
-      date: "2024-01-10",
-      comment:
-        "Dr. Sharma was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
-      helpful: 12,
-      verified: true,
-    },
-    {
-      id: 2,
-      patientName: "Mona Tamang",
-      rating: 5,
-      date: "2024-01-05",
-      comment:
-        "Excellent care during my high-risk pregnancy. Dr. Sharma's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
-      helpful: 8,
-      verified: true,
-    },
-    {
-      id: 3,
-      patientName: "Jenni K.",
-      rating: 4,
-      date: "2023-12-28",
-      comment:
-        "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
-      helpful: 5,
-      verified: true,
-    },
-  ],
-  "2": [
-    {
-      id: 4,
-      patientName: "Ramesh Shrestha",
-      rating: 5,
-      date: "2024-02-15",
-      comment:
-        "Dr. Ram Bahadur Thapa provided excellent support during our complicated pregnancy. His expertise in fetal diagnostics is unmatched.",
-      helpful: 10,
-      verified: true,
-    },
-    {
-      id: 5,
-      patientName: "Anita Gurung",
-      rating: 4,
-      date: "2024-01-30",
-      comment:
-        "Very thorough and caring. He explained every step and made us feel at ease.",
-      helpful: 6,
-      verified: true,
-    },
-  ],
-  "3": [
-    {
-      id: 6,
-      patientName: "Sunita Karki",
-      rating: 5,
-      date: "2024-03-10",
-      comment:
-        "Dr. Mina Karki was so supportive during my home birth. She made the experience calm and empowering.",
-      helpful: 7,
-      verified: true,
-    },
-    {
-      id: 7,
-      patientName: "Bina Rai",
-      rating: 4,
-      date: "2024-02-22",
-      comment:
-        "Great midwife, very knowledgeable about natural birth and breastfeeding support.",
-      helpful: 4,
-      verified: true,
-    },
-  ],
-  "4": [
-    {
-      id: 8,
-      patientName: "Kamal Adhikari",
-      rating: 5,
-      date: "2024-04-05",
-      comment:
-        "Dr. Bishal Adhikari managed my wife's high-risk pregnancy with great care. We are grateful for his expertise.",
-      helpful: 9,
-      verified: true,
-    },
-    {
-      id: 9,
-      patientName: "Maya Gurung",
-      rating: 5,
-      date: "2024-03-18",
-      comment:
-        "Very experienced and compassionate doctor. Highly recommended for complicated pregnancies.",
-      helpful: 5,
-      verified: true,
-    },
-  ],
-}
+const mockReviews: Review[] = [
+  {
+    id: 1,
+    patientName: "Sarah M.",
+    rating: 5,
+    date: "2024-01-10",
+    comment:
+      "Dr. Johnson was amazing throughout my entire pregnancy. She was always available for questions and made me feel so comfortable. Highly recommend!",
+    helpful: 12,
+    verified: true,
+  },
+  {
+    id: 2,
+    patientName: "Maria L.",
+    rating: 5,
+    date: "2024-01-05",
+    comment:
+      "Excellent care during my high-risk pregnancy. Dr. Johnson's expertise and compassion made all the difference. My baby and I are both healthy thanks to her.",
+    helpful: 8,
+    verified: true,
+  },
+  {
+    id: 3,
+    patientName: "Jennifer K.",
+    rating: 4,
+    date: "2023-12-28",
+    comment:
+      "Very knowledgeable and professional. The only downside was sometimes having to wait a bit longer for appointments, but the quality of care made it worth it.",
+    helpful: 5,
+    verified: true,
+  },
+]
 
 export default function DoctorProfilePage() {
   const params = useParams()
   const doctorId = params.id as string
   const doctor = doctorData[doctorId as keyof typeof doctorData]
-  const [reviews, setReviews] = useState<Review[]>(doctorReviews[doctorId] || [])
+  const [reviews, setReviews] = useState<Review[]>(mockReviews)
   const [newReview, setNewReview] = useState("")
   const [newRating, setNewRating] = useState(5)
   const { isPremium } = useSubscription()
@@ -458,17 +390,17 @@ export default function DoctorProfilePage() {
                   <div className="text-sm text-gray-600">Overall Rating</div>
                 </div>
                 <div className="flex-1">
-                  {[5, 4, 3, 2, 1].map((starValue) => (
-                    <div key={starValue} className="flex items-center space-x-2">
-                      <span className="text-sm w-8">{starValue}★</span>
+                  {[5, 4, 3, 2, 1].map((rating) => (
+                    <div key={rating} className="flex items-center space-x-2">
+                      <span className="text-sm w-8">{rating}★</span>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 h-2 rounded-full"
-                          style={{ width: `${starValue === 5 ? 80 : starValue === 4 ? 15 : 5}%` }}
+                          style={{ width: `${rating === 5 ? 80 : rating === 4 ? 15 : 5}%` }}
                         ></div>
                       </div>
                       <span className="text-sm text-gray-600 w-8">
-                        {starValue === 5 ? "80%" : starValue === 4 ? "15%" : "5%"}
+                        {rating === 5 ? "80%" : rating === 4 ? "15%" : "5%"}
                       </span>
                     </div>
                   ))}
@@ -504,6 +436,16 @@ export default function DoctorProfilePage() {
                         ))}
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
+                      <div className="flex items-center space-x-4 mt-3">
+                        <Button variant="ghost" size="sm">
+                          <ThumbsUp className="h-3 w-3 mr-1" />
+                          Helpful ({review.helpful})
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <ThumbsDown className="h-3 w-3 mr-1" />
+                          Not Helpful
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
