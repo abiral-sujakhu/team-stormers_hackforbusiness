@@ -18,6 +18,7 @@ import {
   CheckCircle,
   Lightbulb,
   Baby,
+  Image,
 } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -99,7 +100,7 @@ const trimesterData = {
         recipes: [
           { id: 13, name: "Okhar Ra Chaku Laddu (Walnut & Molasses Ball)", time: "25 min", premium: true },
           { id: 14, name: "Tisi ko Achar (Flaxseed Pickle)", time: "10 min", premium: false },
-          { id: 15, name: "Masu Jhol (Nepali Fish Curry)", time: "25 min", premium: false },
+          { id: 15, name: "Maxaa Jhol (Nepali Fish Curry)", time: "25 min", premium: false },
         ],
       },
       {
@@ -159,6 +160,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
     "Rayo ko saag is rich in folate, calcium, iron, and vitamin K, which support fetal neural development, help in blood formation, strengthen bones, and reduce the risk of birth defects, making it a healthy choice during pregnancy.",
+    image:"/dhido.jpg?height=300&width=400",
     safetyNotes: [
       "Wash and cook mustard greens thoroughly to avoid harmful bacteria.",
       "Use mustard oil moderately or substitute with milder oils if preferred.",
@@ -200,7 +202,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Chickpeas curry is highly beneficial during pregnancy as it provides essential nutrients like protein for your baby’s growth, folic acid to support brain and spinal development, and iron to prevent anemia. Its high fiber content also helps relieve constipation, making it a nourishing and digestion-friendly meal for expecting mothers.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/chanakotarkari.webp?height=300&width=400",
     safetyNotes: ["Use clean, fresh ingredients and cook well to avoid contamination.",],
   },
   4: {
@@ -240,7 +242,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Kidney bean curry is an excellent iron-rich meal for pregnancy, helping to prevent anemia and support healthy blood formation for both mother and baby. The iron from rajma, combined with vitamin C-rich tomatoes in the curry, boosts absorption and ensures a steady oxygen supply — essential for your baby’s growth and development.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/Rajmacurry.jpg?height=300&width=400",
     safetyNotes: ["Cook beans thoroughly to eliminate toxins and ease digestion."],
   },
   7: {
@@ -287,7 +289,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Tofu momos are a nutritious, iron- and protein-rich snack ideal for pregnancy. They support fetal growth and help prevent anemia, while calcium from tofu aids in the baby’s bone development. When steamed and made with fresh, mild ingredients, they’re a light and healthy choice for expecting mothers.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/Tofumomo.jpg?height=300&width=400",
     safetyNotes: ["Ensure all vegetables and tofu are fresh and properly washed",
     "Steam thoroughly to avoid undercooked filling",],
   },
@@ -337,7 +339,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Egg curry is a nutritious choice for pregnant women, offering high-quality protein, iron, and vitamin B12, which support fetal brain development and help prevent anemia. When prepared with moderate spices and healthy ingredients, it’s a hearty and safe option for expecting mothers.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/eggcurry.jpg?height=300&width=400",
     safetyNotes: [
       "Use fresh, properly cooked eggs to avoid salmonella",
       "Wash hands thoroughly after handling eggshells",
@@ -369,7 +371,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Flaxseeds are an excellent plant-based source of Omega-3 fatty acids (ALA), which support the baby’s brain development and help reduce inflammation during pregnancy. They also provide fiber, aiding digestion and preventing constipation, a common issue in pregnancy. Tisi ko Achar is a flavorful and nutritious way to include these benefits in a traditional Nepali diet.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/TisikoAachar.jpg?height=300&width=400",
     safetyNotes: [
      "Do not consume in large quantities as excess flaxseed may affect hormone balance.",
 "Avoid if you have a flaxseed allergy or digestive issues.",
@@ -420,7 +422,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Mustard greens are very high in Vitamin K which supports blood clotting and reduces risk of bleeding.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/Raayokosaag.jpeg?height=300&width=400",
     safetyNotes: ["Wash greens thoroughly to remove dirt and pesticide residues.",
 "Avoid eating raw or undercooked mustard greens during pregnancy.",],
   },
@@ -458,7 +460,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Stuffed Rayo ko Saag Paratha is highly beneficial during pregnancy as it provides iron and folic acid from mustard greens to support blood formation and prevent neural tube defects. The whole wheat flour adds fiber for smooth digestion, while the paratha also offers calcium and energy to support both mother and baby’s growth. It’s a wholesome, tasty way to include essential nutrients in a single meal.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/saagparatha.jpg?height=300&width=400",
     safetyNotes: ["Wash mustard greens thoroughly to remove dirt and pesticides", "Cook greens properly to kill any harmful microbes."],
   },
 
@@ -504,7 +506,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Tofu provides plant-based protein and iron, essential during pregnancy. The colorful vegetables add vitamins and antioxidants for both mom and baby.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/tofusalad.jpg?height=300&width=400",
     safetyNotes: ["Use pasteurized tofu", "Wash all vegetables thoroughly",],
   },
 
@@ -558,7 +560,7 @@ const detailedRecipes = {
 
     pregnancyBenefits:
       "Sidra Fish Curry with Gundruk is great for pregnancy because it’s rich in iron, helping prevent anemia. It provides protein and omega-3s for the baby’s growth and brain development. The dish also supplies vitamin A and calcium for immune health and strong bones, while healthy fats from mustard oil support overall maternal wellbeing.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/sidracurry.jpg?height=300&width=400",
     safetyNotes:[
       "Ensure the fish is fresh and properly cleaned to avoid foodborne illnesses.",
       "Cook the fish thoroughly to eliminate harmful bacteria and parasites.",
@@ -610,7 +612,7 @@ const detailedRecipes = {
 
     pregnancyBenefits:
       "Kheer is a healthy pregnancy dessert rich in calcium and protein for the baby’s bone and tissue development. Nuts add iron and healthy fats, making it a nourishing and energy-boosting treat.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/kheer.avif?height=300&width=400",
     safetyNotes: [
       "Use pasteurized milk to avoid risk of infection during pregnancy.",
       "Avoid overconsumption if diabetic or monitoring sugar intake.",
@@ -653,7 +655,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Khuwa Dudh Barfi is rich in calcium and protein, supporting the baby’s bone and muscle development. The healthy fats and iron from milk and nuts help boost maternal energy and prevent fatigue. It’s a nourishing treat when enjoyed in moderation during pregnancy.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/khuwabarfi.webp?height=300&width=400",
     safetyNotes: ["Use pasteurized milk and khuwa   to prevent any foodborne risk",
     "Avoid overconsumption due to high sugar and fat content",
     "Check for freshness of khuwa and nuts to avoid spoilage",
@@ -704,7 +706,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Paneer Palungo Tarkari is an ideal pregnancy dish as it is rich in iron, calcium, and folate, which are vital for fetal development, bone health, and preventing anemia. The combination of spinach and paneer makes it a wholesome, protein-rich meal that supports both mother and baby when prepared with fresh, mild ingredients.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/palakpanir.jpg?height=300&width=400",
     safetyNotes: ["Use fresh spinach and wash thoroughly to remove any dirt or pesticides",
     "Ensure paneer is fresh or use homemade to avoid contamination",],
   },
@@ -751,7 +753,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Besan Chilla is a light, high-protein, and iron-rich dish perfect for pregnancy. Made from gram flour, it supports muscle development and helps prevent anemia. It’s easy to digest, customizable with vegetables, and ideal as a healthy breakfast or snack for expecting mothers.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/Besan-Chilla.jpg?height=300&width=400",
     safetyNotes: ["Use fresh besan to avoid bitterness or spoilage",
   "Add mild spices to suit pregnancy-related digestion needs",],
   },
@@ -786,12 +788,12 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Okhar Ra Chaku Laddu is rich in Omega-3, iron, and calcium, making it ideal during pregnancy to support the baby’s brain development, boost maternal energy, and prevent anemia.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/chakuladdu.jpeg?height=300&width=400",
     safetyNotes: ["Use fresh salmon", "Cook to proper temperature", "Check for nut allergies"],
   },
 
   15: {
-    name: "Masu Jhol (Nepali Fish Curry)",
+    name: "Maxaa Jhol (Nepali Fish Curry)",
     time: "15 min",
     servings: 2,
     calories: 240,
@@ -828,7 +830,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Fish provides high-quality protein essential for the growth of maternal tissues and the baby.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/fishcurry.jpg?height=300&width=400",
     safetyNotes: ["Do not overconsume; limit fish to 2–3 servings per week as recommended for pregnant women.",
 "Make sure the fish is fully cooked to kill any harmful bacteria or parasites.",],
   },
@@ -869,7 +871,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
       "Broccoli is rich in Vitamin K, essential for proper blood clotting and bone health.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/brocolialoo.svg?height=300&width=400",
     safetyNotes: ["Wash broccoli thoroughly to remove pesticides and dirt.",
 "Cook until tender to make it easier to digest during pregnancy.",],
   },
@@ -906,7 +908,7 @@ const detailedRecipes = {
     ],
     pregnancyBenefits:
      "Soybeans provide plant-based protein that supports fetal growth and maternal tissue repair.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/bhatmas sadheko.jpg?height=300&width=400",
     safetyNotes: ["Ensure soybeans are well-roasted to avoid hardness that can cause bloating.",],
   },
 }
