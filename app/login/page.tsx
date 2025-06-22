@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import { supabase } from "@/lib/supabaseClient"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -27,22 +28,34 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      console.log(" Login attempt for:", email)
+      console.log("🔐 Login attempt for:", email)
 
-      // Simulate login - replace with actual Supabase auth
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // --- Supabase login ---
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-      // Get existing premium status for this user
+      if (error) {
+        toast({
+          title: "Login failed",
+          description: error.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Your subscription/user management
       const existingPremiumStatus = SubscriptionManager.getPremiumStatus(email)
       const subscriptionDetails = SubscriptionManager.getSubscriptionDetails(email)
 
-      console.log(" Existing subscription status:", {
+      console.log("📋 Existing subscription status:", {
         email,
         isPremium: existingPremiumStatus,
         details: subscriptionDetails,
       })
 
-      // Create user object with preserved premium status
       const userData = {
         email: email.toLowerCase(),
         name: email.split("@")[0], // Simple name extraction
@@ -52,15 +65,13 @@ export default function LoginPage() {
         subscriptionType: subscriptionDetails?.subscriptionType || "free",
       }
 
-      // Store user session
       localStorage.setItem("aahar_user", JSON.stringify(userData))
 
-      // Verify subscription if premium
       if (existingPremiumStatus) {
         SubscriptionManager.verifySubscription(email)
       }
 
-      console.log(" Login successful:", userData)
+      console.log("✅ Login successful:", userData)
 
       toast({
         title: existingPremiumStatus ? "Welcome back, Premium Member! 🎉" : "Welcome back! 👋",
@@ -69,7 +80,6 @@ export default function LoginPage() {
           : "You have been successfully logged in.",
       })
 
-      // Dispatch login event
       window.dispatchEvent(
         new CustomEvent("userLoggedIn", {
           detail: { user: userData },

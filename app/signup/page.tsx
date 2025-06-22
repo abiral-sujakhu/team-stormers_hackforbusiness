@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,6 +13,7 @@ import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { SubscriptionManager } from "@/lib/subscription-manager"
+import { supabase } from '@/lib/supabaseClient'
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -44,15 +44,43 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      console.log("📝 Signup attempt for:", formData.email)
+      // Supabase signup
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      })
 
-      // Simulate signup - replace with actual Supabase auth
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      if (error) {
+        toast({
+          title: "Signup failed",
+          description: error.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
 
-      // Initialize user as free tier (new users start free)
+      // Insert into users table
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert([{
+          email: formData.email,
+          name: formData.name,
+          trimester: formData.trimester,
+        }])
+
+      if (insertError) {
+        toast({
+          title: "Profile Save Failed",
+          description: insertError.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Save session locally
       SubscriptionManager.setPremiumStatus(formData.email, false, "free")
-
-      // Store user session
       const userData = {
         email: formData.email.toLowerCase(),
         name: formData.name,
@@ -62,17 +90,13 @@ export default function SignupPage() {
         signupTime: new Date().toISOString(),
         subscriptionType: "free",
       }
-
       localStorage.setItem("aahar_user", JSON.stringify(userData))
-
-      console.log("✅ Signup successful:", userData)
 
       toast({
         title: "Welcome to Aahar! 🎉",
         description: "Your account has been created successfully.",
       })
 
-      // Dispatch signup event
       window.dispatchEvent(
         new CustomEvent("userSignedUp", {
           detail: { user: userData },
