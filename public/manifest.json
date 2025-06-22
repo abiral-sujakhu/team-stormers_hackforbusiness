@@ -1,0 +1,32 @@
+{
+  "name": "Aahar - Pregnancy Nutrition",
+  "short_name": "Aahar",
+  "description": "Your complete guide to trimester-wise healthy eating during pregnancy.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+ "screenshots": [
+  {
+    "src": "/screenshots/install-preview.png",
+    "sizes": "1920x1709",
+    "type": "image/png",
+    "form_factor": "wide"
+  }
+]
+
+}
