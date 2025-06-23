@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -14,7 +14,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Stethoscope, Star, Phone, Calendar, Clock, User } from "lucide-react"
 import { useSubscription } from "@/components/subscription-provider"
@@ -127,12 +126,15 @@ export default function DoctorsPage() {
   const [bookingDate, setBookingDate] = useState("");
   const [bookingTime, setBookingTime] = useState("");
   const [bookingType, setBookingType] = useState("");
-  const [bookingNotes, setBookingNotes] = useState("");
+  const [bookingNotes, setBookingNotes] = useState("");  const [isBooking, setIsBooking] = useState(false);  const [dialogOpen, setDialogOpen] = useState(false);
+  const bookingInProgress = useRef(false);
+  const lastClickTime = useRef(0);
+  const buttonClicked = useRef(false);
   const { isPremium, upgradeToPremium } = useSubscription();
   const { toast } = useToast();
 
-  // Replace this with your actual auth logic (Supabase, NextAuth, etc)
-  const userEmail = "demo@aahar.com"; // For testing, hardcoded. Replace with real user email.
+  // Replace with your actual auth logic
+  const userEmail = "demo@aahar.com";
 
   // Filter logic for doctors
   const filteredDoctors = doctors.filter((doctor) => {
@@ -159,10 +161,32 @@ export default function DoctorsPage() {
   useEffect(() => {
     fetchAppointments();
     // eslint-disable-next-line
-  }, []);
-
-  // Book appointment via backend and refresh list
+  }, []);  // Book appointment via backend and refresh list
   const handleBookAppointment = async () => {
+    const now = Date.now();
+    
+    // One-time button protection per dialog session
+    if (buttonClicked.current) {
+      console.log("Button already clicked in this dialog session");
+      return;
+    }
+    
+    // Debounce: prevent clicks within 3 seconds
+    if (now - lastClickTime.current < 3000) {
+      console.log("Click ignored due to debounce - too fast!");
+      return;
+    }
+    
+    // Double check with ref to prevent any possible race conditions
+    if (isBooking || bookingInProgress.current) {
+      console.log("Booking already in progress, ignoring click");
+      return;
+    }
+    
+    // Mark button as clicked for this dialog session
+    buttonClicked.current = true;
+    lastClickTime.current = now;
+    
     if (!selectedDoctor || !bookingDate || !bookingTime || !bookingType || !userEmail) {
       toast({
         title: "Missing information",
@@ -171,44 +195,62 @@ export default function DoctorsPage() {
       });
       return;
     }
+    
+    console.log("Starting booking process...");
+    setIsBooking(true);
+    bookingInProgress.current = true;
 
-    const res = await fetch("/api/book-appointment", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_email: userEmail,
-        doctor_id: selectedDoctor.id,
-        doctor_name: selectedDoctor.name,
-        date: bookingDate,
-        time: bookingTime,
-        type: bookingType,
-        notes: bookingNotes,
-      }),
-    });
-    const result = await res.json();
-
-    if (result.success) {
-      toast({
-        title: "Appointment booked!",
-        description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
+    try {
+      const res = await fetch("/api/book-appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_email: userEmail,
+          doctor_id: selectedDoctor.id,
+          doctor_name: selectedDoctor.name,
+          date: bookingDate,
+          time: bookingTime,
+          type: bookingType,
+          notes: bookingNotes,
+        }),
       });
-      setSelectedDoctor(null);
-      setBookingDate("");
-      setBookingTime("");
-      setBookingType("");
-      setBookingNotes("");
-      fetchAppointments(); // Refresh after booking
-    } else {
+      const result = await res.json();
+
+      if (result.success) {
+        console.log("Booking successful");
+        toast({
+          title: "Appointment booked!",
+          description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
+        });        // Close dialog and reset form
+        setDialogOpen(false);
+        buttonClicked.current = false; // Reset for next dialog session
+        setSelectedDoctor(null);
+        setBookingDate("");
+        setBookingTime("");
+        setBookingType("");
+        setBookingNotes("");
+        await fetchAppointments(); // Refresh after booking
+      } else {
+        console.log("Booking failed:", result.message);
+        toast({
+          title: "Booking failed",
+          description: result.message || "Try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Network error:", error);
       toast({
         title: "Booking failed",
-        description: result.message || "Try again.",
+        description: "Network error. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      console.log("Booking process completed, resetting flags");
+      setIsBooking(false);
+      bookingInProgress.current = false;
     }
   };
-
-
-
 
   return (
     <div className="space-y-6">
@@ -255,7 +297,6 @@ export default function DoctorsPage() {
                       <span>{doctor.phone}</span>
                     </div>
                   </div>
-
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div className="text-sm">
                       <span className="font-semibold">Rs.{doctor.consultationFee}</span>
@@ -267,101 +308,15 @@ export default function DoctorsPage() {
                           View Profile
                         </Button>
                       </Link>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" onClick={() => setSelectedDoctor(doctor)}>
-                            Book Appointment
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <DialogTitle>Book Appointment with {doctor.name}</DialogTitle>
-                            <DialogDescription>
-                              Schedule your consultation with {doctor.specialty.toLowerCase()}
-                            </DialogDescription>
-                          </DialogHeader>
-
-                          <div className="space-y-4">
-                            {/* Doctor Info */}
-                            <Card>
-                              <CardContent className="pt-6">
-                                <div className="flex items-center space-x-4">
-                                  <img
-                                    src={doctor.image || "/placeholder.svg"}
-                                    alt={doctor.name}
-                                    className="w-12 h-12 rounded-full object-cover"
-                                  />
-                                  <div>
-                                    <h4 className="font-semibold">{doctor.name}</h4>
-                                    <p className="text-sm text-gray-600">{doctor.specialty}</p>
-                                    <p className="text-sm text-gray-600">{doctor.location}</p>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-
-                            {/* Booking Form */}
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <div>
-                                <Label htmlFor="date">Preferred Date</Label>
-                                <Input
-                                  id="date"
-                                  type="date"
-                                  value={bookingDate}
-                                  onChange={(e) => setBookingDate(e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <Label htmlFor="time">Preferred Time</Label>
-                                <Select value={bookingTime} onValueChange={setBookingTime}>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select time" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="9:00 AM">9:00 AM</SelectItem>
-                                    <SelectItem value="10:00 AM">10:00 AM</SelectItem>
-                                    <SelectItem value="11:00 AM">11:00 AM</SelectItem>
-                                    <SelectItem value="2:00 PM">2:00 PM</SelectItem>
-                                    <SelectItem value="3:00 PM">3:00 PM</SelectItem>
-                                    <SelectItem value="4:00 PM">4:00 PM</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </div>
-
-                            <div>
-                              <Label htmlFor="type">Appointment Type</Label>
-                              <Select value={bookingType} onValueChange={setBookingType}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select appointment type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="consultation">Initial Consultation</SelectItem>
-                                  <SelectItem value="checkup">Prenatal Checkup</SelectItem>
-                                  <SelectItem value="ultrasound">Ultrasound</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-
-                            <div>
-                              <Label htmlFor="notes">Notes (Optional)</Label>
-                              <Textarea
-                                id="notes"
-                                placeholder="Any specific concerns or questions you'd like to discuss..."
-                                value={bookingNotes}
-                                onChange={(e) => setBookingNotes(e.target.value)}
-                              />
-                            </div>
-
-                            <div className="flex justify-between items-center pt-4 border-t">
-                              <div className="text-sm text-gray-600">
-                                Consultation fee: <span className="font-semibold">Rs.{doctor.consultationFee}</span>
-                              </div>
-                              <Button onClick={handleBookAppointment}>Confirm Booking</Button>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                      <Button
+                        size="sm"                        onClick={() => {
+                          setSelectedDoctor(doctor);
+                          setDialogOpen(true);
+                          buttonClicked.current = false; // Reset for new dialog session
+                        }}
+                      >
+                        Book Appointment
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -483,6 +438,107 @@ export default function DoctorsPage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Single Booking Dialog for all doctors */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          {selectedDoctor && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Book Appointment with {selectedDoctor.name}</DialogTitle>
+                <DialogDescription>
+                  Schedule your consultation with {selectedDoctor.specialty.toLowerCase()}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                {/* Doctor Info */}
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={selectedDoctor.image || "/placeholder.svg"}
+                        alt={selectedDoctor.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div>
+                        <h4 className="font-semibold">{selectedDoctor.name}</h4>
+                        <p className="text-sm text-gray-600">{selectedDoctor.specialty}</p>
+                        <p className="text-sm text-gray-600">{selectedDoctor.location}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Booking Form */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="date">Preferred Date</Label>
+                    <Input
+                      id="date"
+                      type="date"
+                      value={bookingDate}
+                      onChange={(e) => setBookingDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="time">Preferred Time</Label>
+                    <Select value={bookingTime} onValueChange={setBookingTime}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="9:00 AM">9:00 AM</SelectItem>
+                        <SelectItem value="10:00 AM">10:00 AM</SelectItem>
+                        <SelectItem value="11:00 AM">11:00 AM</SelectItem>
+                        <SelectItem value="2:00 PM">2:00 PM</SelectItem>
+                        <SelectItem value="3:00 PM">3:00 PM</SelectItem>
+                        <SelectItem value="4:00 PM">4:00 PM</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="type">Appointment Type</Label>
+                  <Select value={bookingType} onValueChange={setBookingType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select appointment type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="consultation">Initial Consultation</SelectItem>
+                      <SelectItem value="checkup">Prenatal Checkup</SelectItem>
+                      <SelectItem value="ultrasound">Ultrasound</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="notes">Notes (Optional)</Label>
+                  <Textarea
+                    id="notes"
+                    placeholder="Any specific concerns or questions you'd like to discuss..."
+                    value={bookingNotes}
+                    onChange={(e) => setBookingNotes(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex justify-between items-center pt-4 border-t">
+                  <div className="text-sm text-gray-600">
+                    Consultation fee: <span className="font-semibold">Rs.{selectedDoctor.consultationFee}</span>
+                  </div>
+                  <Button
+                    onClick={handleBookAppointment}
+                    disabled={isBooking}
+                  >
+                    {isBooking ? "Booking..." : "Confirm Booking"}
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

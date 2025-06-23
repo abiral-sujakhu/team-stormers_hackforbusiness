@@ -1,47 +1,76 @@
-// import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
+import { NextRequest } from "next/server";
 
-// const supabase = createClient(
-//   process.env.NEXT_PUBLIC_SUPABASE_URL,
-//   process.env.SUPABASE_SERVICE_ROLE_KEY
-// );
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// export async function POST(req) {
-//   try {
-//     const body = await req.json();
-//     const { user_email, doctor_id, doctor_name, date, time, type, notes } = body;
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error("Missing Supabase environment variables");
+}
 
-//     if (!user_email || !doctor_id || !doctor_name || !date || !time || !type) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: "Missing required fields" }),
-//         { status: 400 }
-//       );
-//     }
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-//     const { error } = await supabase.from("appointments").insert([
-//       {
-//         user_email,
-//         doctor_id,
-//         doctor_name,
-//         date,
-//         time,
-//         type,
-//         notes: notes || "",
-//         status: "upcoming",
-//       },
-//     ]);
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { user_email, doctor_id, doctor_name, date, time, type, notes } = body;
 
-//     if (error) {
-//       return new Response(
-//         JSON.stringify({ success: false, message: error.message }),
-//         { status: 500 }
-//       );
-//     }
+    if (!user_email || !doctor_id || !doctor_name || !date || !time || !type) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Missing required fields" }),
+        { status: 400 }
+      );
+    }    // Check if appointment already exists
+    const { data: existingAppointments, error: checkError } = await supabase
+      .from("appointments")
+      .select("id")
+      .eq("user_email", user_email)
+      .eq("doctor_id", doctor_id)
+      .eq("date", date)
+      .eq("time", time);
 
-//     return new Response(JSON.stringify({ success: true }), { status: 200 });
-//   } catch (err) {
-//     return new Response(
-//       JSON.stringify({ success: false, message: err.message || "Server error" }),
-//       { status: 500 }
-//     );
-//   }
-// }
+    if (checkError) {
+      console.error("Error checking existing appointments:", checkError);
+    }
+
+    if (existingAppointments && existingAppointments.length > 0) {
+      console.log("Duplicate appointment detected:", existingAppointments);
+      return new Response(
+        JSON.stringify({ success: false, message: "Appointment already exists for this date and time" }),
+        { status: 400 }
+      );
+    }
+
+    console.log("Creating new appointment...");
+    const { error } = await supabase.from("appointments").insert([
+      {
+        user_email,
+        doctor_id,
+        doctor_name,
+        date,
+        time,
+        type,
+        notes: notes || "",
+        status: "upcoming",
+      },
+    ]);
+
+    if (error) {
+      return new Response(
+        JSON.stringify({ success: false, message: error.message }),
+        { status: 500 }
+      );
+    }
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (err) {
+    console.error("Appointment booking error:", err);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        message: err instanceof Error ? err.message : "Server error" 
+      }),
+      { status: 500 }
+    );
+  }
+}
