@@ -50,8 +50,7 @@ interface Appointment {
 }
 
 // Example doctors (keep using this)
-const mockDoctors: Doctor[] = [
-  {
+const mockDoctors: Doctor[] = [  {
     id: 1,
     name: "Dr. Sita Sharma",
     specialty: "Obstetrician & Gynecologist",
@@ -60,14 +59,13 @@ const mockDoctors: Doctor[] = [
     location: "Kathmandu Maternity Center",
     phone: "9812345678",
     email: "dr.sita@kathmandumaternity.com",
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/sita.jpeg",
     bio: "Dr. Sita Sharma specializes in high-risk pregnancies and is dedicated to providing compassionate care to mothers throughout Nepal.",
     specializations: ["High-risk pregnancies", "Prenatal care", "Natural birth", "C-sections"],
     languages: ["English", "Nepali"],
     availability: ["Monday", "Tuesday", "Wednesday", "Friday"],
     consultationFee: 400,
-  },
-  {
+  },  {
     id: 2,
     name: "Dr. Ram Bahadur Thapa",
     specialty: "Maternal-Fetal Medicine",
@@ -76,14 +74,13 @@ const mockDoctors: Doctor[] = [
     location: "Patan Hospital",
     phone: "9801122334",
     email: "dr.ram@patanhospital.com",
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/ram.jpeg",
     bio: "Dr. Ram Bahadur Thapa is an expert in maternal-fetal medicine, helping families with complex pregnancies across Nepal.",
     specializations: ["Fetal diagnostics", "Genetic counseling", "Multiple pregnancies", "Fetal surgery"],
     languages: ["English", "Nepali"],
     availability: ["Tuesday", "Wednesday", "Thursday", "Saturday"],
     consultationFee: 250,
-  },
-  {
+  },  {
     id: 3,
     name: "Dr. Mina Karki",
     specialty: "Certified Nurse Midwife",
@@ -92,14 +89,13 @@ const mockDoctors: Doctor[] = [
     location: "Biratnagar Birth Center",
     phone: "9845671234",
     email: "dr.mina@biratnagarbirth.com",
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/minaa.jpg",
     bio: "Dr. Mina Karki empowers women through natural childbirth and provides personalized care for families in the eastern region.",
     specializations: ["Natural birth", "Water birth", "Home birth", "Breastfeeding support"],
     languages: ["English", "Nepali"],
     availability: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday"],
     consultationFee: 500,
-  },
-  {
+  },  {
     id: 4,
     name: "Dr. Bishal Adhikari",
     specialty: "Perinatologist",
@@ -108,7 +104,7 @@ const mockDoctors: Doctor[] = [
     location: "Pokhara Regional Hospital",
     phone: "9865432109",
     email: "dr.bishal@pokharahospital.com",
-    image: "/placeholder.svg?height=100&width=100",
+    image: "/male.jpg",
     bio: "Dr. Bishal Adhikari has extensive experience in managing high-risk pregnancies and complications in the western region.",
     specializations: ["High-risk pregnancies", "Preterm labor", "Pregnancy complications", "NICU coordination"],
     languages: ["English", "Nepali"],
@@ -195,23 +191,40 @@ export default function DoctorsPage() {
       console.log("Booking blocked - already in progress");
       return;
     }
-    
-    // Longer debounce: prevent clicks within 5 seconds
-    if (now - lastClickTime.current < 5000) {
+      // Longer debounce: prevent clicks within 3 seconds
+    if (now - lastClickTime.current < 3000) {
       console.log("Click ignored due to debounce - too fast!");
       return;
     }
     
-    // Mark all flags immediately
+    // Mark all flags immediately - BEFORE any async operations
     buttonClicked.current = true;
     bookingInProgress.current = true;
     setIsBooking(true);
-    lastClickTime.current = now;    
+    lastClickTime.current = now;
+    
+    // Disable the button immediately
+    const button = e?.target as HTMLButtonElement;
+    if (button) {
+      button.disabled = true;
+    }
+    
     if (!selectedDoctor || !bookingDate || !bookingTime || !bookingType || !userEmail) {
       // Reset flags if validation fails
       buttonClicked.current = false;
       bookingInProgress.current = false;
       setIsBooking(false);
+      if (button) {
+        button.disabled = false;
+      }
+      
+      console.log("Validation failed:", {
+        selectedDoctor: !!selectedDoctor,
+        bookingDate,
+        bookingTime, 
+        bookingType,
+        userEmail
+      });
       
       toast({
         title: "Missing information",
@@ -220,31 +233,43 @@ export default function DoctorsPage() {
       });
       return;
     }
+      console.log("Starting booking process...");
     
-    console.log("Starting booking process...");
+    // Generate unique request ID to prevent duplicates
+    const requestId = `${selectedDoctor.id}-${bookingDate}-${bookingTime}-${Date.now()}`;
+    
+    const requestData = {
+      user_email: userEmail,
+      doctor_id: selectedDoctor.id,
+      doctor_name: selectedDoctor.name,
+      date: bookingDate,
+      time: bookingTime,
+      type: bookingType,
+      notes: bookingNotes,
+      request_id: requestId, // Add unique identifier
+    };
+    
+    console.log("Request data:", requestData);
     
     try {
       const res = await fetch("/api/book-appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_email: userEmail,
-          doctor_id: selectedDoctor.id,
-          doctor_name: selectedDoctor.name,
-          date: bookingDate,
-          time: bookingTime,
-          type: bookingType,
-          notes: bookingNotes,
-        }),
+        body: JSON.stringify(requestData),
       });
+      
+      console.log("Response status:", res.status);
       const result = await res.json();
+      console.log("Response data:", result);
 
       if (result.success) {
         console.log("Booking successful");
         toast({
           title: "Appointment booked!",
           description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
-        });        // Close dialog and reset form
+        });
+        
+        // Close dialog and reset form
         setDialogOpen(false);
         setSelectedDoctor(null);
         resetBookingState();
@@ -256,6 +281,13 @@ export default function DoctorsPage() {
           description: result.message || "Try again.",
           variant: "destructive",
         });
+        
+        // Reset flags on failure so user can try again
+        buttonClicked.current = false;
+        bookingInProgress.current = false;
+        if (button) {
+          button.disabled = false;
+        }
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -264,11 +296,28 @@ export default function DoctorsPage() {
         description: "Network error. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      console.log("Booking process completed, resetting flags");
-      setIsBooking(false);
+      
+      // Reset flags on error so user can try again
+      buttonClicked.current = false;
       bookingInProgress.current = false;
-    }  };  return (
+      if (button) {
+        button.disabled = false;
+      }
+    } finally {
+      console.log("Booking process completed");
+      setIsBooking(false);
+      
+      // Only reset these flags after a longer delay for successful bookings
+      setTimeout(() => {
+        buttonClicked.current = false;
+        bookingInProgress.current = false;
+        if (button) {
+          button.disabled = false;
+        }      }, 5000); // 5 second delay before allowing new bookings
+    }
+  };
+
+  return (
     <PremiumGuard>
       <div className="space-y-6">
         <div>

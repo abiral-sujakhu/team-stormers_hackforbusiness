@@ -25,8 +25,7 @@ import { useSubscription } from "@/components/subscription-provider"
 import { useToast } from "@/hooks/use-toast"
 
 // Mock doctor data - in real app this would come from API
-const doctorData = {
-  "1": {
+const doctorData = {  "1": {
     id: 1,
     name: "Dr. Sita Sharma",
     specialty: "Obstetrician & Gynecologist",
@@ -36,7 +35,7 @@ const doctorData = {
     address: "123 Medical Plaza, Suite 200, Kathmandu, Nepal",
     phone: "9812345678",
     email: "dr.sita@kathmandumaternity.com",
-    image: "/placeholder.svg?height=200&width=200",
+    image: "/sita.jpeg",
     bio: "Dr. Sita Sharma specializes in high-risk pregnancies and is dedicated to providing compassionate care to mothers throughout Nepal. She completed her residency at Tribhuvan University Teaching Hospital and has been practicing for over 12 years.",
     education: [
       "MD - Institute of Medicine, TU (2008)",
@@ -54,8 +53,7 @@ const doctorData = {
     consultationFee: 400,
     hospitalAffiliations: ["Kathmandu Maternity Center", "Patan Hospital", "Teaching Hospital"],
     awards: ["Top Doctor 2023 - Kathmandu Health Magazine", "Excellence in Maternal Care Award 2022", "Patient Choice Award 2021"],
-  },
-  "2": {
+  },  "2": {
     id: 2,
     name: "Dr. Ram Bahadur Thapa",
     specialty: "Maternal-Fetal Medicine",
@@ -65,7 +63,7 @@ const doctorData = {
     address: "456 Hospital Road, Patan, Nepal",
     phone: "9801122334",
     email: "dr.ram@patanhospital.com",
-    image: "/placeholder.svg?height=200&width=200",
+    image: "/ram.jpeg",
     bio: "Dr. Ram Bahadur Thapa is an expert in maternal-fetal medicine, helping families with complex pregnancies across Nepal. He completed his fellowship at Patan Hospital and has over 15 years of experience.",
     education: [
       "MD - BPKIHS (2006)",
@@ -83,8 +81,7 @@ const doctorData = {
     consultationFee: 250,
     hospitalAffiliations: ["Patan Hospital", "Kathmandu Maternity Center"],
     awards: ["Best Maternal-Fetal Specialist 2022", "Research Excellence Award 2021"],
-  },
-  "3": {
+  },  "3": {
     id: 3,
     name: "Dr. Mina Karki",
     specialty: "Certified Nurse Midwife",
@@ -94,7 +91,7 @@ const doctorData = {
     address: "789 Birth Center Lane, Biratnagar, Nepal",
     phone: "9845671234",
     email: "dr.mina@biratnagarbirth.com",
-    image: "/placeholder.svg?height=200&width=200",
+    image: "/minaa.jpg",
     bio: "Dr. Mina Karki empowers women through natural childbirth and provides personalized care for families in the eastern region. She is a certified nurse midwife with a passion for holistic care.",
     education: [
       "BSc Nursing - Purbanchal University (2012)",
@@ -111,8 +108,7 @@ const doctorData = {
     consultationFee: 150,
     hospitalAffiliations: ["Biratnagar Birth Center"],
     awards: ["Midwife of the Year 2023", "Community Care Award 2022"],
-  },
-  "4": {
+  },  "4": {
     id: 4,
     name: "Dr. Bishal Adhikari",
     specialty: "Perinatologist",
@@ -122,7 +118,7 @@ const doctorData = {
     address: "321 Regional Hospital Road, Pokhara, Nepal",
     phone: "9865432109",
     email: "dr.bishal@pokharahospital.com",
-    image: "/placeholder.svg?height=200&width=200",
+    image: "/male.jpg",
     bio: "Dr. Bishal Adhikari has extensive experience in managing high-risk pregnancies and complications in the western region. He is a leading perinatologist in Pokhara.",
     education: [
       "MD - Pokhara University (2004)",

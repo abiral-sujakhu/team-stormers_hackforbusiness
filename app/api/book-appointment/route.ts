@@ -39,9 +39,18 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ success: false, message: "Appointment already exists for this date and time" }),
         { status: 400 }
       );
-    }
-
-    console.log("Creating new appointment...");
+    }    console.log("Creating new appointment...");
+    console.log("Appointment data:", {
+      user_email,
+      doctor_id,
+      doctor_name,
+      date,
+      time,
+      type,
+      notes: notes || "",
+      status: "upcoming",
+    });
+    
     const { error } = await supabase.from("appointments").insert([
       {
         user_email,
@@ -53,9 +62,8 @@ export async function POST(req: NextRequest) {
         notes: notes || "",
         status: "upcoming",
       },
-    ]);
-
-    if (error) {
+    ]);    if (error) {
+      console.error("Supabase insert error:", error);
       return new Response(
         JSON.stringify({ success: false, message: error.message }),
         { status: 500 }
