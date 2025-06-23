@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { Stethoscope, Star, Phone, Calendar, Clock, User } from "lucide-react"
 import { useSubscription } from "@/components/subscription-provider"
+import { PremiumGuard } from "@/components/premium-guard"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 
@@ -132,9 +133,27 @@ export default function DoctorsPage() {
   const buttonClicked = useRef(false);
   const { isPremium, upgradeToPremium } = useSubscription();
   const { toast } = useToast();
-
   // Replace with your actual auth logic
   const userEmail = "demo@aahar.com";
+
+  // Reset booking state
+  const resetBookingState = () => {
+    buttonClicked.current = false;
+    bookingInProgress.current = false;
+    setIsBooking(false);
+    setBookingDate("");
+    setBookingTime("");
+    setBookingType("");
+    setBookingNotes("");
+  };
+
+  // Handle dialog close
+  const handleDialogChange = (open: boolean) => {
+    setDialogOpen(open);
+    if (!open) {
+      resetBookingState();
+    }
+  };
 
   // Filter logic for doctors
   const filteredDoctors = doctors.filter((doctor) => {
@@ -162,32 +181,38 @@ export default function DoctorsPage() {
     fetchAppointments();
     // eslint-disable-next-line
   }, []);  // Book appointment via backend and refresh list
-  const handleBookAppointment = async () => {
+  const handleBookAppointment = async (e?: React.MouseEvent) => {
+    // Prevent form submission or event bubbling
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     const now = Date.now();
     
-    // One-time button protection per dialog session
-    if (buttonClicked.current) {
-      console.log("Button already clicked in this dialog session");
+    // Stronger protection: check multiple conditions
+    if (buttonClicked.current || isBooking || bookingInProgress.current) {
+      console.log("Booking blocked - already in progress");
       return;
     }
     
-    // Debounce: prevent clicks within 3 seconds
-    if (now - lastClickTime.current < 3000) {
+    // Longer debounce: prevent clicks within 5 seconds
+    if (now - lastClickTime.current < 5000) {
       console.log("Click ignored due to debounce - too fast!");
       return;
     }
     
-    // Double check with ref to prevent any possible race conditions
-    if (isBooking || bookingInProgress.current) {
-      console.log("Booking already in progress, ignoring click");
-      return;
-    }
-    
-    // Mark button as clicked for this dialog session
+    // Mark all flags immediately
     buttonClicked.current = true;
-    lastClickTime.current = now;
-    
+    bookingInProgress.current = true;
+    setIsBooking(true);
+    lastClickTime.current = now;    
     if (!selectedDoctor || !bookingDate || !bookingTime || !bookingType || !userEmail) {
+      // Reset flags if validation fails
+      buttonClicked.current = false;
+      bookingInProgress.current = false;
+      setIsBooking(false);
+      
       toast({
         title: "Missing information",
         description: "Please fill in all required fields.",
@@ -197,9 +222,7 @@ export default function DoctorsPage() {
     }
     
     console.log("Starting booking process...");
-    setIsBooking(true);
-    bookingInProgress.current = true;
-
+    
     try {
       const res = await fetch("/api/book-appointment", {
         method: "POST",
@@ -223,12 +246,8 @@ export default function DoctorsPage() {
           description: `Your appointment with ${selectedDoctor.name} has been scheduled.`,
         });        // Close dialog and reset form
         setDialogOpen(false);
-        buttonClicked.current = false; // Reset for next dialog session
         setSelectedDoctor(null);
-        setBookingDate("");
-        setBookingTime("");
-        setBookingType("");
-        setBookingNotes("");
+        resetBookingState();
         await fetchAppointments(); // Refresh after booking
       } else {
         console.log("Booking failed:", result.message);
@@ -249,15 +268,13 @@ export default function DoctorsPage() {
       console.log("Booking process completed, resetting flags");
       setIsBooking(false);
       bookingInProgress.current = false;
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Doctor Appointments</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">Find and book appointments with pregnancy specialists</p>
-      </div>
+    }  };  return (
+    <PremiumGuard>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Doctor Appointments</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Find and book appointments with pregnancy specialists</p>
+        </div>
 
       <Tabs defaultValue="find" className="space-y-4">
         <TabsList>
@@ -301,16 +318,15 @@ export default function DoctorsPage() {
                     <div className="text-sm">
                       <span className="font-semibold">Rs.{doctor.consultationFee}</span>
                       <span className="text-gray-500"> consultation</span>
-                    </div>
-                    <div className="space-x-2">
-                      <Link href={`/dashboard/doctors/${doctor.id}`}>
-                        <Button variant="outline" size="sm">
+                    </div>                    <div className="space-x-2">
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/dashboard/doctors/${doctor.id}`}>
                           View Profile
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                       <Button
-                        size="sm"                        onClick={() => {
-                          setSelectedDoctor(doctor);
+                        size="sm"                        onClick={() => {                          setSelectedDoctor(doctor);
+                          resetBookingState();
                           setDialogOpen(true);
                           buttonClicked.current = false; // Reset for new dialog session
                         }}
@@ -437,13 +453,11 @@ export default function DoctorsPage() {
             </div>
           )}
         </TabsContent>
-      </Tabs>
-
-      {/* Single Booking Dialog for all doctors */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      </Tabs>      {/* Single Booking Dialog for all doctors */}
+      <Dialog open={dialogOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="max-w-2xl">
-          {selectedDoctor && (
-            <>
+          {selectedDoctor ? (
+            <div>
               <DialogHeader>
                 <DialogTitle>Book Appointment with {selectedDoctor.name}</DialogTitle>
                 <DialogDescription>
@@ -526,19 +540,20 @@ export default function DoctorsPage() {
                 <div className="flex justify-between items-center pt-4 border-t">
                   <div className="text-sm text-gray-600">
                     Consultation fee: <span className="font-semibold">Rs.{selectedDoctor.consultationFee}</span>
-                  </div>
-                  <Button
-                    onClick={handleBookAppointment}
-                    disabled={isBooking}
+                  </div>                  <Button
+                    type="button"
+                    onClick={(e) => handleBookAppointment(e)}
+                    disabled={isBooking || bookingInProgress.current}
+                    className="disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isBooking ? "Booking..." : "Confirm Booking"}
-                  </Button>
+                    {isBooking ? "Booking..." : "Confirm Booking"}                  </Button>
                 </div>
               </div>
-            </>
-          )}
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
     </div>
+    </PremiumGuard>
   )
 }

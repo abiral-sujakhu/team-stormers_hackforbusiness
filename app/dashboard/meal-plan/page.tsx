@@ -18,39 +18,10 @@ import {
 } from "@/components/ui/dialog"
 import Link from "next/link"
 import { trimesterRecipes } from "@/lib/utils"
-
-// Utility function to sync saved recipes with localStorage
-function getSavedRecipesFromStorage() {
-  if (typeof window === "undefined") return [];
-  try {
-    const saved = JSON.parse(localStorage.getItem("savedRecipes") || "[]");
-    // Merge missing fields from trimesterRecipes
-    if (!Array.isArray(saved)) return [];
-    return saved.map((recipe: any) => {
-      const full = Array.isArray(trimesterRecipes)
-        ? trimesterRecipes.find((r: any) => Number(r.id) === Number(recipe.id))
-        : undefined;
-      if (!full) return recipe;
-      return {
-        ...full,
-        ...recipe,
-        // Prefer saved values, but fill missing arrays from trimesterRecipes
-        ingredients: Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? recipe.ingredients : full.ingredients,
-        instructions: Array.isArray(recipe.instructions) && recipe.instructions.length > 0 ? recipe.instructions : full.instructions,
-        nutrients: Array.isArray(recipe.nutrients) && recipe.nutrients.length > 0 ? recipe.nutrients : full.nutrients,
-        tips: Array.isArray(recipe.tips) && recipe.tips.length > 0 ? recipe.tips : full.tips,
-        safetyNotes: Array.isArray(recipe.safetyNotes) && recipe.safetyNotes.length > 0 ? recipe.safetyNotes : full.safetyNotes,
-        pregnancyBenefits: recipe.pregnancyBenefits || full.pregnancyBenefits,
-        image: recipe.image || full.image,
-        servings: recipe.servings || full.servings,
-        calories: recipe.calories || full.calories,
-        difficulty: recipe.difficulty || full.difficulty
-      };
-    });
-  } catch {
-    return [];
-  }
-}
+import { 
+  getSavedRecipesFromSupabase, 
+  removeRecipeFromSupabase 
+} from "@/lib/saved-recipes-service"
 
 // Add a Recipe type for type safety
 interface Recipe {
@@ -74,148 +45,106 @@ interface Recipe {
 }
 
 function setSavedRecipesToStorage(recipes: Recipe[]) {
-  if (typeof window === "undefined") return
-  localStorage.setItem("savedRecipes", JSON.stringify(recipes))
+  // This function is no longer needed as we use Supabase
+  // Keeping for backwards compatibility but it does nothing
+  return
 }
 
-const mockSavedRecipes = [
-  {
-    id: 1,
-    name: "Rayo Ko Saag with Dhido",
-    difficulty: "Easy",
-    time: "40 min",
-    servings: 1,
-    calories: 250,
-    nutrients: [
-      "Folic Acid :170–230 mcg",
-      "Iron:\t3–4 mg",
-      "Calcium:\t150–200 mg ",
-      "Fiber: \t4–5 grams"
-    ],
-    ingredients: [
-      "2 cups rayo ko saag (mustard greens), washed and chopped",
-      "1 tbsp mustard oil",
-      "2 cloves garlic, minced",
-      "3 cloves garlic, minced",
-      "1 small green chili (optional), chopped",
-      "½ tsp turmeric powder",
-      "1 cup millet flour (or buckwheat/sorghum flour)",
-      "3 cups water",
-      "Salt to taste"
-    ],
-    instructions: [
-      "Start the saag: Heat mustard oil in a pan over medium heat. Add minced garlic and green chili; sauté until fragrant.",
-      "Add chopped rayo ko saag and turmeric powder. Stir well, then add salt and about ¼ cup water. Cover and simmer on low heat for 10–15 minutes until the greens are tender. Stir occasionally and add water if needed to prevent drying.",
-      "Prepare the Dhido: While the saag is cooking, bring 3 cups water to a boil in a heavy-bottomed pan with a pinch of salt.",
-      "Gradually add millet flour to the boiling water while stirring continuously with a wooden spatula to avoid lumps.",
-      "Reduce heat to low and keep stirring until the mixture thickens to a smooth, dough-like consistency. Cook for 5–7 minutes, stirring occasionally.",
-      "Serve the hot Rayo ko Saag alongside the freshly made Dhido, shaping the dhido into small balls or servings on the plate"
-    ],
-    tips: [
-      "Rinse lentils thoroughly until water runs clear to remove any debris",
-      "Don't overcook spinach to retain maximum folate and iron content",
-      "Add a squeeze of lemon juice before serving for enhanced iron absorption",
-      "For creamier texture, blend half the curry and mix back in",
-      "Store leftovers in refrigerator for up to 3 days"
-    ],
-    pregnancyBenefits:
-      "This recipe is a powerhouse for first trimester nutrition. The combination of lentils and spinach provides essential folate for neural tube development, iron to prevent anemia, and plant-based protein for your baby's growth. The coconut milk adds healthy fats for brain development.",
-    image: "/placeholder.svg?height=300&width=400",
-    safetyNotes: [
-      "Wash and cook mustard greens thoroughly to avoid harmful bacteria.",
-      "Use mustard oil moderately or substitute with milder oils if preferred.",
-      "Avoid too much chili to prevent digestive discomfort during pregnancy."
-    ],
-    liked: true,
-  },
-  {
-    id: 4,
-    name: "Bean and Vegetable Stew",
-    difficulty: "Easy",
-    time: "45 min",
-    category: "Main Course",
-    trimester: 1,
-    liked: false,
-  },
-  {
-    id: 7,
-    name: "Creamy Spinach Smoothie",
-    difficulty: "Easy",
-    time: "10 min",
-    category: "Breakfast",
-    trimester: 2,
-    liked: true,
-  },
-  {
-    id: 10,
-    name: "Herb-Roasted Chicken",
-    difficulty: "Medium",
-    time: "60 min",
-    category: "Main Course",
-    trimester: 2,
-    liked: false,
-  },
-  {
-    id: 14,
-    name: "Chia Seed Pudding",
-    difficulty: "Easy",
-    time: "10 min",
-    category: "Dessert",
-    trimester: 3,
-    liked: true,
-  },
-  {
-    id: 16,
-    name: "Massaged Kale Salad",
-    difficulty: "Easy",
-    time: "15 min",
-    category: "Salad",
-    trimester: 3,
-    liked: false,
-  },
-]
-
 export default function MealPlanPage() {
-  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>(getSavedRecipesFromStorage())
+  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([])
   const [likedRecipes, setLikedRecipes] = useState<number[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [newRecipeName, setNewRecipeName] = useState("")
+  const [loading, setLoading] = useState(true)
   const { toast } = useToast()
 
+  // Load saved recipes from Supabase on mount
   useEffect(() => {
-    const recipes = getSavedRecipesFromStorage()
-    setSavedRecipes(recipes)
-    // Initialize liked recipes
-    const liked = recipes.filter((recipe: Recipe) => recipe.liked).map((recipe: Recipe) => recipe.id)
-    setLikedRecipes(liked)
-    // Debug output
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line no-console
-      console.log('DEBUG: savedRecipes from localStorage:', recipes)
-      const hasRayo = recipes.some((r: any) => r.id === 1)
-      if (!hasRayo) {
-        console.warn('DEBUG: Rayo Ko Saag with Dhido (id:1) is NOT in savedRecipes!')
-      } else {
-        console.log('DEBUG: Rayo Ko Saag with Dhido (id:1) IS in savedRecipes!')
+    const loadSavedRecipes = async () => {
+      setLoading(true)
+      try {
+        const result = await getSavedRecipesFromSupabase()
+        if (result.success) {
+          setSavedRecipes(result.data)
+          // Initialize liked recipes
+          const liked = result.data.filter((recipe: Recipe) => recipe.liked).map((recipe: Recipe) => recipe.id)
+          setLikedRecipes(liked)
+        } else {
+          console.error('Failed to load saved recipes:', result.error)
+          toast({
+            title: "Error loading recipes",
+            description: "Failed to load your saved recipes. Please try again.",
+            variant: "destructive",
+          })
+        }
+      } catch (error) {
+        console.error('Error loading saved recipes:', error)
+        toast({
+          title: "Error loading recipes",
+          description: "Failed to load your saved recipes. Please try again.",
+          variant: "destructive",
+        })
+      } finally {
+        setLoading(false)
       }
     }
-  }, [])
 
-  const handleRemoveRecipe = (recipeId: number) => {
-    const updated = savedRecipes.filter((recipe: Recipe) => recipe.id !== recipeId)
-    setSavedRecipes(updated)
-    setSavedRecipesToStorage(updated)
-    toast({
-      title: "Recipe removed",
-      description: "Recipe has been removed from your meal plan.",
-    })
+    loadSavedRecipes()
+  }, [toast])
+
+  const handleRemoveRecipe = async (recipeId: number) => {
+    try {
+      const result = await removeRecipeFromSupabase(recipeId)
+      if (result.success) {
+        const updated = savedRecipes.filter((recipe: Recipe) => recipe.id !== recipeId)
+        setSavedRecipes(updated)
+        toast({
+          title: "Recipe removed",
+          description: "Recipe has been removed from your meal plan.",
+        })
+      } else {
+        toast({
+          title: "Error removing recipe",
+          description: "Failed to remove recipe. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error('Error removing recipe:', error)
+      toast({
+        title: "Error removing recipe",
+        description: "Failed to remove recipe. Please try again.",
+        variant: "destructive",
+      })
+    }
   }
-
+  const handleClearAllRecipes = async () => {
+    try {
+      // Remove all recipes from Supabase one by one
+      const removePromises = savedRecipes.map(recipe => removeRecipeFromSupabase(recipe.id))
+      await Promise.all(removePromises)
+      
+      setSavedRecipes([])
+      toast({
+        title: "All recipes cleared",
+        description: "All saved recipes have been removed from your meal plan.",
+      })
+    } catch (error) {
+      console.error('Error clearing all recipes:', error)
+      toast({
+        title: "Error clearing recipes",
+        description: "Failed to clear all recipes. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }
   const handleToggleLike = (recipeId: number) => {
     setLikedRecipes((prev: number[]) => (prev.includes(recipeId) ? prev.filter((id) => id !== recipeId) : [...prev, recipeId]))
     setSavedRecipes((prev: Recipe[]) =>
       prev.map((recipe: Recipe) => (recipe.id === recipeId ? { ...recipe, liked: !recipe.liked } : recipe)),
     )
+    // Note: This only updates local state. To persist liked state to Supabase,
+    // you would need to add a "liked" column to the saved_recipes table and update it here.
   }
 
   const filteredRecipes = savedRecipes.filter(
@@ -233,75 +162,79 @@ export default function MealPlanPage() {
     }
     return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800"
   }
-
   const getRecipeDetails = (id: number): Recipe | undefined => {
     // Find the saved recipe and the full trimester recipe
     const saved = savedRecipes.find((r: any) => Number(r.id) === Number(id));
     const full = Array.isArray(trimesterRecipes)
       ? trimesterRecipes.find((r: any) => Number(r.id) === Number(id))
       : undefined;
-    if ((!saved || typeof saved !== 'object') && (!full || typeof full !== 'object')) return undefined;
-    const safeSaved: Partial<Recipe> = saved && typeof saved === 'object' ? saved : {};
-    const safeFull: Partial<Recipe> = full && typeof full === 'object' ? full : {};
-    return {
-      ...safeFull,
-      ...safeSaved,
-      ingredients:
-        Array.isArray(safeSaved.ingredients)
-          ? safeSaved.ingredients.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-          : Array.isArray(safeFull.ingredients)
-            ? safeFull.ingredients.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-            : [],
-      instructions:
-        Array.isArray(safeSaved.instructions)
-          ? safeSaved.instructions.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-          : Array.isArray(safeFull.instructions)
-            ? safeFull.instructions.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-            : [],
-      nutrients:
-        Array.isArray(safeSaved.nutrients)
-          ? safeSaved.nutrients.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-          : Array.isArray(safeFull.nutrients)
-            ? safeFull.nutrients.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-            : [],
-      tips:
-        Array.isArray(safeSaved.tips)
-          ? safeSaved.tips.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-          : Array.isArray(safeFull.tips)
-            ? safeFull.tips.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-            : [],
-      safetyNotes:
-        Array.isArray(safeSaved.safetyNotes)
-          ? safeSaved.safetyNotes.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-          : Array.isArray(safeFull.safetyNotes)
-            ? safeFull.safetyNotes.filter((i: string) => typeof i === 'string' && i.trim() !== '')
-            : [],
-      pregnancyBenefits: safeSaved.pregnancyBenefits || safeFull.pregnancyBenefits || '',
-      image: safeSaved.image || safeFull.image || '',
-      servings: safeSaved.servings || safeFull.servings || 1,
-      calories: safeSaved.calories || safeFull.calories || 0,
-      difficulty: safeSaved.difficulty || safeFull.difficulty || 'Easy',
-    } as Recipe;
+    
+    if (!saved) return undefined; // Only show details if recipe is actually saved
+    
+    // If we have both saved and full recipe data, merge them
+    if (full && typeof full === 'object') {
+      return {
+        ...full,
+        ...saved,
+        // Use full recipe data for arrays if saved doesn't have them
+        ingredients: Array.isArray(saved.ingredients) && saved.ingredients.length > 0 
+          ? saved.ingredients 
+          : Array.isArray(full.ingredients) ? full.ingredients : [],
+        instructions: Array.isArray(saved.instructions) && saved.instructions.length > 0 
+          ? saved.instructions 
+          : Array.isArray(full.instructions) ? full.instructions : [],
+        nutrients: Array.isArray(saved.nutrients) && saved.nutrients.length > 0 
+          ? saved.nutrients 
+          : Array.isArray(full.nutrients) ? full.nutrients : [],
+        tips: Array.isArray(saved.tips) && saved.tips.length > 0 
+          ? saved.tips 
+          : Array.isArray(full.tips) ? full.tips : [],
+        safetyNotes: Array.isArray(saved.safetyNotes) && saved.safetyNotes.length > 0 
+          ? saved.safetyNotes 
+          : Array.isArray(full.safetyNotes) ? full.safetyNotes : [],
+        pregnancyBenefits: saved.pregnancyBenefits || full.pregnancyBenefits || '',
+        image: saved.image || full.image || '',
+        servings: saved.servings || full.servings || 1,
+        calories: saved.calories || full.calories || 0,
+        difficulty: saved.difficulty || full.difficulty || 'Easy',
+      } as Recipe;
+    }
+    
+    // If we only have saved data, return that
+    return saved as Recipe;
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Meal Plan</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Organize your saved recipes and plan your weekly meals
           </p>
         </div>
+        {savedRecipes.length > 0 && (
+          <Button 
+            variant="outline" 
+            onClick={handleClearAllRecipes}
+            className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300"
+          >
+            Clear All Recipes
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="saved" className="space-y-4">
         <TabsList>
           <TabsTrigger value="saved">Saved Recipes ({filteredRecipes.length})</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="saved" className="space-y-4">
-          {filteredRecipes.length === 0 ? (
+        </TabsList>        <TabsContent value="saved" className="space-y-4">
+          {loading ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <div className="w-8 h-8 border-2 border-pink-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="text-gray-600 dark:text-gray-400">Loading your saved recipes...</p>
+              </CardContent>
+            </Card>
+          ) : filteredRecipes.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <ChefHat className="h-12 w-12 text-gray-400 mb-4" />
@@ -351,10 +284,9 @@ export default function MealPlanPage() {
                               <ChefHat className="h-5 w-5 mr-1 text-pink-500" />
                               <span className="tracking-wide">View Recipe</span>
                             </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                          </DialogTrigger>                          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                             {getRecipeDetails(recipe.id) ? (
-                              <>
+                              <div>
                                 {/* Removed Add to Shopping List and Print Recipe buttons */}
                                 <DialogHeader>
                                   <DialogTitle className="text-3xl font-bold text-gradient flex items-center space-x-3">
@@ -519,12 +451,11 @@ export default function MealPlanPage() {
                                               </div>
                                             </div>
                                           ))}
-                                        </div>
-                                      </CardContent>
+                                        </div>                                      </CardContent>
                                     </Card>
                                   </TabsContent>
                                 </Tabs>
-                              </>
+                              </div>
                             ) : (
                               <div className="flex items-center justify-center p-8">
                                 <div className="text-center">

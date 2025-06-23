@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Baby, Calendar, Heart, Scale, Ruler, Clock, CheckCircle, AlertCircle, Plus, Edit } from "lucide-react"
 import { useSubscription } from "@/components/subscription-provider"
+import { PremiumGuard } from "@/components/premium-guard"
 import { useToast } from "@/hooks/use-toast"
 
 interface BabyMilestone {
@@ -447,18 +448,17 @@ export default function DeliveryTrackerPage() {
   const currentMilestone = getCurrentMilestone()
   const nextMilestone = getNextMilestone()
   const stats = getCompletionStats()
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Baby Delivery Tracker</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Track your baby's development and prepare for delivery
-          </p>
+    <PremiumGuard>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Baby Delivery Tracker</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Track your baby's development and prepare for delivery
+            </p>
+          </div>
         </div>
-        <Badge className="bg-purple-600 text-white">Premium Active</Badge>
-      </div>
 
       {/* Input for Current Week */}
       <Card className="mb-4">
@@ -856,10 +856,10 @@ export default function DeliveryTrackerPage() {
                   </ul>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </CardContent>          </Card>
         </CardContent>
       </Card>
     </div>
+    </PremiumGuard>
   );
 }

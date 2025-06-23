@@ -13,6 +13,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Badge } from "@/components/ui/badge"
+import { useSubscription } from "@/components/subscription-provider"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -28,18 +30,18 @@ const menuItems = [
     url: "/dashboard/meal-plan",
     icon: Utensils,
     color: "text-green-500",
-  },
-  {
+  },  {
     title: "Delivery Tracker",
     url: "/dashboard/delivery-tracker",
     icon: Baby,
     color: "text-pink-500",
-  },
-  {
+    premium: true,
+  },{
     title: "Doctor Appointments",
     url: "/dashboard/doctors",
     icon: Stethoscope,
     color: "text-purple-500",
+    premium: true,
   },
   {
     title: "Subscriptions",
@@ -78,6 +80,7 @@ const trimesterItems = [
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { isPremium } = useSubscription()
 
   return (
     <Sidebar className="glass-effect border-r border-white/20 dark:border-gray-700/20">
@@ -97,19 +100,27 @@ export function AppSidebar() {
             Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {menuItems.map((item) => (
+            <SidebarMenu className="space-y-1">              {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.url}
-                    className="rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-pink-100 data-[active=true]:to-purple-100 dark:data-[active=true]:from-pink-900/30 dark:data-[active=true]:to-purple-900/30 data-[active=true]:text-pink-700 dark:data-[active=true]:text-pink-300"
-                  >
-                    <Link href={item.url} className="flex items-center space-x-3 w-full">
-                      <item.icon className={`h-5 w-5 ${item.color}`} />
-                      <span className="font-medium">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <Link href={item.url}>
+                    <SidebarMenuButton
+                      isActive={pathname === item.url}
+                      className="rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-pink-100 data-[active=true]:to-purple-100 dark:data-[active=true]:from-pink-900/30 dark:data-[active=true]:to-purple-900/30 data-[active=true]:text-pink-700 dark:data-[active=true]:text-pink-300"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center space-x-3">
+                          <item.icon className={`h-5 w-5 ${item.color}`} />
+                          <span className="font-medium">{item.title}</span>
+                        </div>
+                        {item.premium && !isPremium && (
+                          <Badge className="bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs px-2 py-0.5 ml-2">
+                            <Crown className="h-3 w-3 mr-1" />
+                            Pro
+                          </Badge>
+                        )}
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -121,18 +132,19 @@ export function AppSidebar() {
             Trimester Guides
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {trimesterItems.map((item) => (
+            <SidebarMenu className="space-y-1">              {trimesterItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.url}
-                    className="rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-pink-100 data-[active=true]:to-purple-100 dark:data-[active=true]:from-pink-900/30 dark:data-[active=true]:to-purple-900/30 data-[active=true]:text-pink-700 dark:data-[active=true]:text-pink-300"
-                  >
-                    <Link href={item.url} className="flex items-center space-x-3 w-full">
-                      <span className="font-medium">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <Link href={item.url}>
+                    <SidebarMenuButton
+                      isActive={pathname === item.url}
+                      className="rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-pink-100 data-[active=true]:to-purple-100 dark:data-[active=true]:from-pink-900/30 dark:data-[active=true]:to-purple-900/30 data-[active=true]:text-pink-700 dark:data-[active=true]:text-pink-300"
+                    >
+                      <div className="flex items-center space-x-3 w-full">
+                        <item.icon className={`h-5 w-5 ${item.color}`} />
+                        <span className="font-medium">{item.title}</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

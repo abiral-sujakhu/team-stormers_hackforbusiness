@@ -19,9 +19,10 @@ import {
   Lightbulb,
   Baby,
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useSubscription } from "@/components/subscription-provider"
+import { saveRecipeToSupabase, removeRecipeFromSupabase, getSavedRecipesFromSupabase } from "@/lib/saved-recipes-service"
 
 const trimesterData = {
   "1": {
@@ -936,6 +937,17 @@ export default function TrimesterPage() {
   const [showRecipeModal, setShowRecipeModal] = useState(false)
   const { toast } = useToast()
   const { isPremium } = useSubscription()
+  // Load saved recipes from Supabase on component mount
+  useEffect(() => {
+    const loadSavedRecipes = async () => {
+      const result = await getSavedRecipesFromSupabase()
+      if (result.success) {
+        const savedIds = result.data.map((recipe: any) => recipe.id)
+        setSavedRecipes(savedIds)
+      }
+    }
+    loadSavedRecipes()
+  }, [])
 
   if (!data) {
     return <div>Trimester not found</div>
@@ -951,7 +963,6 @@ export default function TrimesterPage() {
       nutrientRecipes: data.nutrients.flatMap((n) => n.recipes.map((r) => r.id)),
     })
   }
-
   const handleLike = (recipeId: number) => {
     setLikedRecipes((prev) => (prev.includes(recipeId) ? prev.filter((id) => id !== recipeId) : [...prev, recipeId]))
     toast({
@@ -1192,19 +1203,36 @@ export default function TrimesterPage() {
                                 likedRecipes.includes(recipe.id) ? "fill-red-500 text-red-500" : "text-gray-400"
                               }`}
                             />
-                          </Button>
-                        </div>
+                          </Button>                        </div>
                         <div className="flex space-x-2">
-                         <Button
-  variant="ghost"
-  size="sm"
-  onClick={() => {
-    setSavedRecipes((prev) =>
-      prev.includes(recipe.id)
-        ? prev.filter((id) => id !== recipe.id)
-        : [...prev, recipe.id]
-    );
-    saveRecipeToMealPlan(recipe); // keep saving to localStorage if you want
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={async () => {
+    const isCurrentlySaved = savedRecipes.includes(recipe.id)
+    
+    if (isCurrentlySaved) {
+      // Remove from Supabase
+      const result = await removeRecipeFromSupabase(recipe.id)
+      if (result.success) {
+        setSavedRecipes((prev) => prev.filter((id) => id !== recipe.id))
+        toast({
+          title: "Recipe removed",
+          description: "Recipe removed from your meal plan.",
+        })
+      }
+    } else {
+      // Add to Supabase
+      const fullRecipe = detailedRecipes[recipe.id as keyof typeof detailedRecipes] || recipe
+      const result = await saveRecipeToSupabase(recipe.id, fullRecipe)
+      if (result.success) {
+        setSavedRecipes((prev) => [...prev, recipe.id])
+        toast({
+          title: "Recipe saved!",
+          description: `${recipe.name} has been added to your meal plan.`,
+        })
+      }
+    }
   }}
   disabled={!canAccessRecipe(recipe)}
   className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl"
@@ -1216,18 +1244,7 @@ export default function TrimesterPage() {
         : "text-gray-400"
     }`}
   />
-</Button>
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled={!canAccessRecipe(recipe)}
-                            className="p-2 hover:bg-green-100 dark:hover:bg-green-900/20 rounded-xl"
-                            onClick={() => handleSave(recipe.id)}
-                          >
-                            <MessageCircle className="h-5 w-5 text-gray-400" />
-                          </Button>
-                        </div>
+</Button>                        </div>
                       </div>
 
                       <Button
@@ -1268,10 +1285,9 @@ export default function TrimesterPage() {
       ))}
 
       {/* Recipe Details Modal */}
-      <Dialog open={showRecipeModal} onOpenChange={setShowRecipeModal}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <Dialog open={showRecipeModal} onOpenChange={setShowRecipeModal}>        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           {selectedRecipe ? (
-            <>
+            <div>
               <DialogHeader>
                 <DialogTitle className="text-3xl font-bold text-gradient flex items-center space-x-3">
                   <ChefHat className="h-8 w-8 text-pink-500" />
@@ -1444,13 +1460,12 @@ export default function TrimesterPage() {
                               {nutrient.split(":")[0]?.trim() || "Nutrient"}
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        ))}                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
               </Tabs>
-            </>
+            </div>
           ) : (
             <div className="flex items-center justify-center p-8">
               <div className="text-center">
